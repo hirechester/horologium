@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.8 — Build 9
+
+- Added JSON import/export in General settings, including ordered locations, emoji, custom labels, and all portable app preferences.
+- Added a versioned transfer format, import review, validation before replacement, and a local pre-import recovery copy.
+- Kept Start at login local to each Mac and recorded future settings-portability requirements in AGENTS.md.
+
 ## 1.0.7 — Build 8
 
 - Added System/Custom accent color selection in General settings, using the native macOS color picker.

@@ -96,6 +96,7 @@ final class AppStore: ObservableObject {
     @Published var previewDate: Date?
     @Published var month: Date
     @Published var storageWarning: String?
+    private var applyingImport = false
     private let defaults: UserDefaults
     private let clock: () -> Date
     var engine: TimeEngine {
@@ -171,7 +172,32 @@ final class AppStore: ObservableObject {
         locations.append(location)
     }
 
+    func exportSettings() throws -> Data {
+        try SettingsArchive(locations: locations, preferences: preferences, exportedAt: clock()).encoded()
+    }
+
+    func importSettings(from data: Data) throws {
+        try importSettings(SettingsArchive.decode(data))
+    }
+
+    func importSettings(_ archive: SettingsArchive) throws {
+        try archive.validate()
+        // Encode and validate everything before changing either the stored or visible state.
+        let data = try JSONEncoder().encode(State(locations: archive.locations, preferences: archive.preferences))
+        if let previous = defaults.data(forKey: "horologium.state") {
+            defaults.set(previous, forKey: "horologium.beforeImport")
+        }
+        defaults.set(data, forKey: "horologium.state")
+        applyingImport = true
+        locations = archive.locations
+        preferences = archive.preferences
+        applyingImport = false
+        storageWarning = nil
+        returnToNow()
+    }
+
     private func save() {
+        guard !applyingImport else { return }
         do {
             let data = try JSONEncoder().encode(State(locations: locations, preferences: preferences))
             defaults.set(data, forKey: "horologium.state")

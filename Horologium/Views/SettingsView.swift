@@ -1,5 +1,6 @@
 import ServiceManagement
 import SwiftUI
+import UniformTypeIdentifiers
 
 @MainActor
 final class SettingsNavigation: ObservableObject {
@@ -13,6 +14,12 @@ struct SettingsView: View {
     @State private var editor: LocationEditorState?
     @State private var loginEnabled = SMAppService.mainApp.status == .enabled
     @State private var loginError: String?
+    @State private var showingImport = false
+    @State private var showingExport = false
+    @State private var exportDocument: SettingsFileDocument?
+    @State private var pendingImport: SettingsArchive?
+    @State private var confirmingImport = false
+    @State private var transferError: String?
 
     enum Tab: String, CaseIterable {
         case general, menuBar, calendar, layout, locations, about
@@ -50,6 +57,26 @@ struct SettingsView: View {
                 selected = location.id
             }
         }
+        .fileImporter(isPresented: $showingImport, allowedContentTypes: [.json]) { result in
+            do { try prepareImport(from: result.get()) }
+            catch { reportTransferError(error) }
+        }
+        .fileExporter(isPresented: $showingExport, document: exportDocument, contentType: .json,
+                      defaultFilename: "Horologium Settings") { result in
+            if case .failure(let error) = result { reportTransferError(error) }
+        }
+        .confirmationDialog("Replace current settings?", isPresented: $confirmingImport, titleVisibility: .visible) {
+            Button("Replace Settings", role: .destructive) { applyImport() }
+            Button("Cancel", role: .cancel) { pendingImport = nil }
+        } message: {
+            if let archive = pendingImport {
+                Text("Import \(archive.locations.count) saved locations and app preferences from this file? This replaces your current locations and preferences. Start at login stays unchanged on this Mac.")
+            }
+        }
+        .alert("Settings transfer failed", isPresented: Binding(
+            get: { transferError != nil }, set: { if !$0 { transferError = nil } })) {
+                Button("OK", role: .cancel) { transferError = nil }
+            } message: { Text(transferError ?? "") }
         .onAppear { loginEnabled = SMAppService.mainApp.status == .enabled }
         .modifier(AppAccent(preferences: store.preferences))
     }
@@ -134,6 +161,12 @@ struct SettingsView: View {
                 Button("Allow in Login Items Settings…") { SMAppService.openSystemSettingsLoginItems() }
             }
             if let loginError { Text(loginError).foregroundStyle(.red).font(.caption) }
+            Section {
+                HStack {
+                    Button { pendingImport = nil; showingImport = true } label: { Label("Import Settings…", systemImage: "square.and.arrow.down") }
+                    Button { exportSettings() } label: { Label("Export Settings…", systemImage: "square.and.arrow.up") }
+                }.buttonStyle(.bordered)
+            }
         }.formStyle(.grouped).scrollContentBackground(.hidden)
     }
 
@@ -232,6 +265,38 @@ struct SettingsView: View {
     private func moveSelected(_ direction: Int) {
         guard let index = selectedIndex, store.locations.indices.contains(index + direction) else { return }
         store.locations.swapAt(index, index + direction)
+    }
+
+    private func reportTransferError(_ error: Error) {
+        let cocoa = error as NSError
+        guard !(cocoa.domain == NSCocoaErrorDomain && cocoa.code == NSUserCancelledError) else { return }
+        transferError = error.localizedDescription
+    }
+
+    private func exportSettings() {
+        do {
+            exportDocument = SettingsFileDocument(data: try store.exportSettings())
+            showingExport = true
+        } catch { reportTransferError(error) }
+    }
+
+    private func prepareImport(from url: URL) throws {
+        let access = url.startAccessingSecurityScopedResource()
+        defer { if access { url.stopAccessingSecurityScopedResource() } }
+        if let size = try url.resourceValues(forKeys: [.fileSizeKey]).fileSize,
+           size > SettingsArchive.maximumFileSize { throw SettingsTransferError.tooLarge }
+        pendingImport = try SettingsArchive.decode(Data(contentsOf: url))
+        confirmingImport = true
+    }
+
+    private func applyImport() {
+        guard let archive = pendingImport else { return }
+        pendingImport = nil
+        do {
+            try store.importSettings(archive)
+            selected = nil
+            selectedSection = nil
+        } catch { reportTransferError(error) }
     }
 
     private func setLogin(_ enabled: Bool) {

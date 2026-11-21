@@ -71,7 +71,7 @@ Create a local installer for development:
 ./scripts/package.sh --local
 ```
 
-Output: `build/packages/Horologium-1.0.7-build8-local.pkg`. This contains an ad hoc signed app; the package is **not Developer ID signed or notarized** and is for local development.
+Output: `build/packages/Horologium-1.0.8-build9-local.pkg`. This contains an ad hoc signed app; the package is **not Developer ID signed or notarized** and is for local development.
 
 Once Ardens' Apple Developer Program membership is active:
 
@@ -90,9 +90,19 @@ The script builds an arm64 release app, signs it with hardened runtime and a sec
 
 Quit an existing Horologium process before installing an updated build, then reopen the app. Automatic updates and App Store distribution are outside this version.
 
+## Move settings between Macs
+
+In **Settings → General**, choose **Export Settings…** to save a readable JSON file. Transfer that file to another Mac, choose **Import Settings…**, review the location count, and confirm **Replace Settings**.
+
+The file includes saved locations in order (including labels and emoji), menu bar options, calendar preferences, section order, appearance, and custom accent colors. System-following options use the destination Mac's system settings. Start at login is an OS registration and stays unchanged on each Mac.
+
+Import replaces the current portable configuration; it does not merge locations. Invalid or unsupported files leave current settings untouched. A copy of the previous local state is retained under the `horologium.beforeImport` UserDefaults key. Temporary calendar/time-travel state is not exported.
+
+The JSON format has an app identifier and format version, plus optional export/app-version metadata. New portable fields must be included and older files kept compatible; the project requirement is recorded in [AGENTS.md](AGENTS.md). Files are limited to 2 MB.
+
 ## Versioning
 
-The current version is **1.0.7 (build 8)**. `Version.json` is the source of truth; the Xcode project generator reads it, About reads the built app metadata, and installer filenames include both version and build.
+The current version is **1.0.8 (build 9)**. `Version.json` is the source of truth; the Xcode project generator reads it, About reads the built app metadata, and installer filenames include both version and build.
 
 Bump the patch version and build once per delivered change:
 
