@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.4 — Build 5
+
+- Added a Command-drag rearrangement tip beneath the macOS Clock Settings link.
+
 ## 1.0.3 — Build 4
 
 - Removed the Menu Bar formatting group's heading.

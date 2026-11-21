@@ -131,6 +131,9 @@ struct SettingsView: View {
                 Link(destination: URL(string: "x-apple.systempreferences:com.apple.ControlCenter-Settings.extension?Clock")!) {
                     Label("Open macOS Clock Settings…", systemImage: "arrow.up.forward.square")
                 }
+            } footer: {
+                Text("Hold ⌘ Command and drag menu bar items to rearrange them.")
+                    .font(.caption).foregroundStyle(.secondary)
             }
         }.formStyle(.grouped).scrollContentBackground(.hidden).toggleStyle(.switch)
     }

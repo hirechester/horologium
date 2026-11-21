@@ -69,7 +69,7 @@ Create a local installer for development:
 ./scripts/package.sh --local
 ```
 
-Output: `build/packages/Horologium-1.0.3-build4-local.pkg`. This contains an ad hoc signed app; the package is **not Developer ID signed or notarized** and is for local development.
+Output: `build/packages/Horologium-1.0.4-build5-local.pkg`. This contains an ad hoc signed app; the package is **not Developer ID signed or notarized** and is for local development.
 
 Once Ardens' Apple Developer Program membership is active:
 
@@ -90,7 +90,7 @@ Quit an existing Horologium process before installing an updated build, then reo
 
 ## Versioning
 
-The current version is **1.0.3 (build 4)**. `Version.json` is the source of truth; the Xcode project generator reads it, About reads the built app metadata, and installer filenames include both version and build.
+The current version is **1.0.4 (build 5)**. `Version.json` is the source of truth; the Xcode project generator reads it, About reads the built app metadata, and installer filenames include both version and build.
 
 Bump the patch version and build once per delivered change:
 
