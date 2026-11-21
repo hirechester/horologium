@@ -16,17 +16,24 @@ final class VisualPreviewTests: XCTestCase {
             SavedLocation(label: "Tokyo", detail: "Tokyo, Japan", timeZoneID: "Asia/Tokyo", emoji: "🇯🇵", sourceName: "Tokyo"),
             SavedLocation(label: "San Francisco", detail: "California, United States", timeZoneID: "America/Los_Angeles", emoji: "🇺🇸", sourceName: "San Francisco")
         ]
-        try render(PopoverView(store: store, openSettings: {}), name: "01-calendar-and-world-clocks", width: 352)
-        store.travel(step: 64)
-        try render(PopoverView(store: store, openSettings: {}), name: "02-time-travel", width: 352)
+        try render(PopoverView(store: store, openLocations: {}), name: "01-calendar-and-world-clocks", width: 352)
+        store.travel(step: 32)
+        try render(PopoverView(store: store, openLocations: {}), name: "02-time-travel", width: 352)
         try render(SettingsView(store: store), name: "03-settings", width: 540)
-        try render(PopoverView(store: store, openSettings: {}), name: "05-dark-mode", width: 352, dark: true)
+        try render(SettingsView(store: store, initialTab: .menuBar), name: "08-menu-bar-settings", width: 540)
+        try render(SettingsView(store: store, initialTab: .calendar), name: "09-calendar-settings", width: 540)
+        try render(SettingsView(store: store, initialTab: .layout), name: "10-layout-settings", width: 540)
+        try render(SettingsView(store: store, initialTab: .locations), name: "11-location-settings", width: 540)
+        try render(PopoverView(store: store, openLocations: {}), name: "05-dark-mode", width: 352, dark: true)
         try render(EmojiPicker(selection: .constant("🇬🇧"), initialCatalog: try EmojiCatalog.bundled()), name: "06-native-emoji-picker", width: 370)
         try render(LocationEditor(existing: store.locations[0], initialCities: try CityCatalog.bundled().search("London"), onSave: { _ in }), name: "07-custom-location", width: 520)
+        store.preferences.sectionOrder = [.timeZones, .calendar, .timeTravel]
+        try render(PopoverView(store: store, openLocations: {}), name: "12-reordered-sections", width: 352)
+        store.preferences.sectionOrder = DropdownSection.allCases
         // Also render the empty first-launch state, without changing the real app's settings.
         store.locations = []
         store.returnToNow()
-        try render(PopoverView(store: store, openSettings: {}), name: "04-first-launch", width: 352)
+        try render(PopoverView(store: store, openLocations: {}), name: "04-first-launch", width: 352)
     }
 
     @MainActor private func render<V: View>(_ content: V, name: String, width: CGFloat, dark: Bool = false) throws {

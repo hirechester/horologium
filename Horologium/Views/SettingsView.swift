@@ -1,6 +1,12 @@
 import ServiceManagement
 import SwiftUI
 
+@MainActor
+final class SettingsNavigation: ObservableObject {
+    @Published var tab: SettingsView.Tab
+    init(tab: SettingsView.Tab = .general) { self.tab = tab }
+}
+
 struct SettingsView: View {
     @ObservedObject var store: AppStore
     @State private var selected: UUID?
@@ -8,15 +14,58 @@ struct SettingsView: View {
     @State private var loginEnabled = SMAppService.mainApp.status == .enabled
     @State private var loginError: String?
 
+    enum Tab: String, CaseIterable { case general, menuBar, calendar, layout, locations }
+    @ObservedObject private var navigation: SettingsNavigation
+    @State private var selectedSection: DropdownSection?
+
+    init(store: AppStore, initialTab: Tab = .general, navigation: SettingsNavigation? = nil) {
+        self.store = store
+        self.navigation = navigation ?? SettingsNavigation(tab: initialTab)
+    }
+
     var body: some View {
-        VStack(alignment: .leading, spacing: 18) {
+        VStack(alignment: .leading, spacing: 16) {
             HStack(spacing: 12) {
-                Image(nsImage: NSImage(contentsOf: Bundle.main.url(forResource: "Logo", withExtension: "png")!)!).resizable().scaledToFit().frame(width: 48, height: 48)
-                VStack(alignment: .leading, spacing: 3) {
-                    Text("Horologium").font(.title2.weight(.semibold))
-                    Text("A little perspective on your day.").foregroundStyle(.secondary)
-                }
+                Image(nsImage: NSImage(contentsOf: Bundle.main.url(forResource: "Logo", withExtension: "png")!)!).resizable().scaledToFit().frame(width: 40, height: 40)
+                Text("Horologium").font(.title2.weight(.semibold))
             }
+            Picker("Settings category", selection: $navigation.tab) {
+                Text("General").tag(Tab.general)
+                Text("Menu Bar").tag(Tab.menuBar)
+                Text("Calendar").tag(Tab.calendar)
+                Text("Layout").tag(Tab.layout)
+                Text("Locations").tag(Tab.locations)
+            }.pickerStyle(.segmented).labelsHidden()
+            Group {
+                switch navigation.tab {
+                case .general: general
+                case .menuBar: menuBar
+                case .calendar: calendar
+                case .layout: layout
+                case .locations: locations
+                }
+            }.frame(maxWidth: .infinity, maxHeight: .infinity)
+            if let warning = store.storageWarning { Text(warning).font(.caption).foregroundStyle(.orange) }
+            HStack {
+                Text("Version 1.0 · All settings stay on this Mac").font(.caption).foregroundStyle(.secondary)
+                Spacer()
+                Link("City data: GeoNames", destination: URL(string: "https://www.geonames.org/")!).font(.caption)
+            }
+        }
+        .padding(24).frame(width: 540, height: 600)
+        .background(Color(nsColor: .windowBackgroundColor))
+        .sheet(item: $editor) { state in
+            LocationEditor(existing: state.location) { location in
+                if let index = store.locations.firstIndex(where: { $0.id == location.id }) { store.locations[index] = location }
+                else { store.add(location) }
+                selected = location.id
+            }
+        }
+        .onAppear { loginEnabled = SMAppService.mainApp.status == .enabled }
+    }
+
+    private var locations: some View {
+        VStack(alignment: .leading, spacing: 14) {
             HStack {
                 Text("Locations").font(.headline)
                 Spacer()
@@ -57,39 +106,85 @@ struct SettingsView: View {
                 Button { moveSelected(1) } label: { Image(systemName: "arrow.down") }
                     .disabled(selectedIndex == nil || selectedIndex == store.locations.count - 1).accessibilityLabel("Move location down")
             }
-            Divider()
-            Form {
-                Picker("Clock format", selection: $store.preferences.clockFormat) {
-                    ForEach(ClockFormat.allCases) { Text($0.title).tag($0) }
-                }.frame(maxWidth: 300)
-                Picker("Appearance", selection: $store.preferences.appearance) {
-                    ForEach(AppearanceMode.allCases) { Text($0.title).tag($0) }
-                }.frame(maxWidth: 300)
-                Toggle("Show date in the menu bar", isOn: $store.preferences.showDate)
-                Toggle("Start Horologium at login", isOn: Binding(get: { loginEnabled }, set: setLogin))
-                if SMAppService.mainApp.status == .requiresApproval {
-                    Button("Allow in Login Items Settings…") { SMAppService.openSystemSettingsLoginItems() }
-                }
-                if let loginError { Text(loginError).foregroundStyle(.red).font(.caption) }
-            }
-            if let warning = store.storageWarning { Text(warning).font(.caption).foregroundStyle(.orange) }
             Spacer(minLength: 0)
+        }.padding(16)
+    }
+
+    private var general: some View {
+        Form {
+            Picker("Clock format", selection: $store.preferences.clockFormat) {
+                ForEach(ClockFormat.allCases) { Text($0.title).tag($0) }
+            }
+            Picker("Appearance", selection: $store.preferences.appearance) {
+                ForEach(AppearanceMode.allCases) { Text($0.title).tag($0) }
+            }
+            Toggle("Start Horologium at login", isOn: Binding(get: { loginEnabled }, set: setLogin))
+            if SMAppService.mainApp.status == .requiresApproval {
+                Button("Allow in Login Items Settings…") { SMAppService.openSystemSettingsLoginItems() }
+            }
+            if let loginError { Text(loginError).foregroundStyle(.red).font(.caption) }
+            Text("System follows your Mac’s clock and appearance preferences.").font(.caption).foregroundStyle(.secondary)
+        }.formStyle(.grouped)
+    }
+
+    private var menuBar: some View {
+        Form {
+            Section("Show") {
+                Toggle("Week number", isOn: $store.preferences.showWeekNumber)
+                Toggle("Day of week", isOn: $store.preferences.showDayOfWeek)
+                Toggle("Date", isOn: $store.preferences.showDate)
+                Toggle("Month", isOn: $store.preferences.showMonth).disabled(!store.preferences.showDate)
+                Toggle("Time", isOn: $store.preferences.showTime)
+                Toggle("Seconds", isOn: $store.preferences.showSeconds).disabled(!store.preferences.showTime)
+                Toggle("AM/PM symbols", isOn: $store.preferences.showAMPM)
+                    .disabled(!store.preferences.showTime || store.preferences.clockFormat == .twentyFourHour)
+            }
+            Section {
+                Text(store.menuTitle.isEmpty ? "Clock icon" : store.menuTitle)
+                    .font(.system(.body, design: .monospaced)).accessibilityLabel("Menu bar preview")
+            } header: { Text("Preview") }
+        }.formStyle(.grouped).toggleStyle(.switch)
+    }
+
+    private var calendar: some View {
+        Form {
+            Picker("Start week on", selection: $store.preferences.weekStart) {
+                ForEach(WeekStart.allCases) { Text($0.title).tag($0) }
+            }
+            Picker("Time travel interval", selection: $store.preferences.travelInterval) {
+                ForEach(TravelInterval.allCases) { Text($0.title).tag($0) }
+            }
+            Text("System uses your Mac’s first day of the week. Time travel snaps to the chosen interval without tick marks.")
+                .font(.caption).foregroundStyle(.secondary)
+        }.formStyle(.grouped)
+    }
+
+    private var layout: some View {
+        VStack(alignment: .leading, spacing: 14) {
+            Text("Dropdown section order").font(.headline)
+            Text("Drag sections, or select one and use the arrows.").font(.caption).foregroundStyle(.secondary)
+            List(selection: $selectedSection) {
+                ForEach(store.preferences.sectionOrder) { section in
+                    Text(section.title).padding(.vertical, 8).tag(section)
+                }
+                .onMove { store.preferences.sectionOrder.move(fromOffsets: $0, toOffset: $1) }
+            }.frame(height: 170).clipShape(RoundedRectangle(cornerRadius: 8))
             HStack {
-                Text("Version 1.0 · All settings stay on this Mac").font(.caption).foregroundStyle(.secondary)
+                Button { moveSection(-1) } label: { Image(systemName: "arrow.up") }
+                    .disabled(sectionIndex == nil || sectionIndex == 0).accessibilityLabel("Move section up")
+                Button { moveSection(1) } label: { Image(systemName: "arrow.down") }
+                    .disabled(sectionIndex == nil || sectionIndex == 2).accessibilityLabel("Move section down")
                 Spacer()
-                Link("City data: GeoNames", destination: URL(string: "https://www.geonames.org/")!).font(.caption)
+                Button("Reset Order") { store.preferences.sectionOrder = DropdownSection.allCases }
             }
-        }
-        .padding(24).frame(width: 540, height: 600)
-        .background(Color(nsColor: .windowBackgroundColor))
-        .sheet(item: $editor) { state in
-            LocationEditor(existing: state.location) { location in
-                if let index = store.locations.firstIndex(where: { $0.id == location.id }) { store.locations[index] = location }
-                else { store.add(location) }
-                selected = location.id
-            }
-        }
-        .onAppear { loginEnabled = SMAppService.mainApp.status == .enabled }
+            Spacer()
+        }.padding(16)
+    }
+
+    private var sectionIndex: Int? { store.preferences.sectionOrder.firstIndex { $0 == selectedSection } }
+    private func moveSection(_ direction: Int) {
+        guard let index = sectionIndex, store.preferences.sectionOrder.indices.contains(index + direction) else { return }
+        store.preferences.sectionOrder.swapAt(index, index + direction)
     }
 
     private var selectedIndex: Int? { store.locations.firstIndex { $0.id == selected } }

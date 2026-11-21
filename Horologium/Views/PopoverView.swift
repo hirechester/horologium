@@ -2,38 +2,19 @@ import SwiftUI
 
 struct PopoverView: View {
     @ObservedObject var store: AppStore
-    var openSettings: () -> Void
+    var openLocations: () -> Void
     @FocusState private var focused: Bool
 
     var body: some View {
         VStack(spacing: 0) {
-            HStack(spacing: 8) {
-                Image(systemName: "clock").foregroundStyle(.tint)
-                Text("Horologium").font(.system(.subheadline, design: .rounded, weight: .semibold))
-                Spacer()
-                if store.previewDate != nil {
-                    Text("PREVIEW").font(.system(size: 9, weight: .bold)).tracking(1)
-                        .foregroundStyle(.tint)
-                } else {
-                    Circle().fill(.green).frame(width: 5, height: 5)
-                    Text("Live").font(.caption).foregroundStyle(.secondary)
+            ForEach(Array(store.preferences.sectionOrder.enumerated()), id: \.element) { index, section in
+                if index > 0 { Divider().padding(.vertical, 14) }
+                switch section {
+                case .calendar: CalendarView(store: store)
+                case .timeTravel: timeTravel
+                case .timeZones: clocks
                 }
             }
-            .padding(.bottom, 18)
-            CalendarView(store: store)
-            Divider().padding(.vertical, 14)
-            timeTravel
-            Divider().padding(.vertical, 14)
-            clocks
-            Divider().padding(.top, 12)
-            HStack {
-                Button(action: openSettings) { Label("Settings", systemImage: "gearshape") }
-                    .keyboardShortcut(",", modifiers: .command)
-                Spacer()
-                Button("Quit") { NSApplication.shared.terminate(nil) }
-                    .keyboardShortcut("q", modifiers: .command)
-            }
-            .font(.caption).buttonStyle(.borderless).foregroundStyle(.secondary).padding(.top, 12)
         }
         .padding(18)
         .frame(width: 352)
@@ -50,7 +31,7 @@ struct PopoverView: View {
     private var timeTravel: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
-                Text("TIME TRAVEL").font(.system(size: 10, weight: .semibold)).tracking(1).foregroundStyle(.secondary)
+                Text(store.previewDate == nil ? "TIME TRAVEL" : "TIME TRAVEL · PREVIEW").font(.system(size: 10, weight: .semibold)).tracking(1).foregroundStyle(.secondary)
                 Spacer()
                 Button("Now") { store.returnToNow() }
                     .font(.caption.weight(.medium)).buttonStyle(.borderless)
@@ -58,17 +39,12 @@ struct PopoverView: View {
             }
             Text(ClockText.date(store.displayedDate) + " · " + ClockText.preview(store.displayedDate, format: store.preferences.clockFormat))
                 .font(.system(size: 11)).monospacedDigit().lineLimit(1).minimumScaleFactor(0.8)
-            Slider(value: Binding(get: { store.engine.step(for: store.displayedDate) },
+            Slider(value: Binding(get: { min(store.engine.step(for: store.displayedDate), store.engine.maximumStep(on: store.selectedDate)) },
                                   set: { store.travel(step: $0) }),
-                   in: 0...store.engine.maximumStep(on: store.selectedDate), step: 1)
+                   in: 0...store.engine.maximumStep(on: store.selectedDate))
                 .controlSize(.small)
                 .accessibilityLabel("Preview time on selected day")
                 .accessibilityValue(ClockText.preview(store.displayedDate, format: store.preferences.clockFormat))
-            HStack {
-                Text("Start of day")
-                Spacer()
-                Text("End of day")
-            }.font(.system(size: 9)).foregroundStyle(.tertiary)
         }
     }
 
@@ -77,7 +53,7 @@ struct PopoverView: View {
             HStack {
                 Text("WORLD CLOCKS").font(.system(size: 10, weight: .semibold)).tracking(1).foregroundStyle(.secondary)
                 Spacer()
-                Button(action: openSettings) { Image(systemName: "plus") }
+                Button(action: openLocations) { Image(systemName: "plus") }
                     .buttonStyle(.borderless).accessibilityLabel("Add location")
             }
             if store.locations.isEmpty {
@@ -85,7 +61,7 @@ struct PopoverView: View {
                     Text("Keep your people in time.").font(.subheadline.weight(.medium))
                     Text("Add cities and give them names that mean something to you.")
                         .font(.caption).foregroundStyle(.secondary).multilineTextAlignment(.center)
-                    Button("Add Location", action: openSettings).padding(.top, 3)
+                    Button("Add Location", action: openLocations).padding(.top, 3)
                 }.frame(maxWidth: .infinity).padding(.vertical, 10)
             } else {
                 ScrollView {

@@ -10,9 +10,11 @@ Click the date and time in the menu bar to browse a month, check your saved loca
 - Offline search across 34,248 GeoNames cities, plus manual IANA time-zone selection.
 - Custom clock labels, optional native macOS emoji, editing, removal, and reordering.
 - Searchable native emoji picker with country flags first and category filters.
-- Time travel on the selected calendar day in 15-minute steps, with automatic daylight-saving handling.
+- A plain time-travel slider with 15/30/60-minute snapping (30 by default) and automatic daylight-saving handling.
 - Local dates and time differences for every location, including fractional-hour offsets.
-- System, 12-hour, and 24-hour formats; optional menu bar date; optional start at login.
+- System, 12-hour, and 24-hour formats; system or custom week start; optional start at login.
+- Independent menu bar toggles for week number, weekday, date, month, time, seconds, and AM/PM.
+- Reorder Calendar, Time Travel, and Time Zones in Settings → Layout.
 - System-following appearance by default, with Light/Dark overrides and VoiceOver labels.
 - Local preferences only. No accounts, calendar permissions, event notifications, analytics, or runtime network requests.
 
@@ -34,6 +36,12 @@ Rendered from the actual SwiftUI views with sample locations (not desktop screen
 
 [Custom location editor](docs/previews/07-custom-location.png)
 
+| Menu bar preferences | Section order |
+| --- | --- |
+| ![Menu bar preferences](docs/previews/08-menu-bar-settings.png) | ![Section order](docs/previews/10-layout-settings.png) |
+
+[Week start and slider intervals](docs/previews/09-calendar-settings.png) · [Locations](docs/previews/11-location-settings.png) · [Reordered dropdown example](docs/previews/12-reordered-sections.png)
+
 ## Build and run
 
 Open `Horologium.xcodeproj` in Xcode 26 or later, choose the **Horologium** scheme and **My Mac**, then Run. Development does not require a paid Developer Program membership. Use **Sign to Run Locally** if Xcode requests signing configuration.
@@ -46,7 +54,7 @@ open build/DerivedData/Build/Products/Debug/Horologium.app
 ./scripts/test.sh
 ```
 
-The app lives in the menu bar and does not display a Dock icon. Settings and Quit are available at the bottom of the dropdown. Arrow keys move the calendar selection by a day or week; Space returns to now. Command-comma opens Settings.
+The app lives in the menu bar and does not display a Dock icon. Right-click (or Control-click) the menu bar item for Settings and Quit. The dropdown has no app header or settings footer. If all menu bar text is disabled, a small clock icon keeps the app accessible. Arrow keys move the calendar selection by a day or week; Space returns to now. Command-comma opens Settings. The plus button opens the Locations settings. Clock format and week start follow the Mac’s system preferences by default; both can be overridden independently.
 
 For start at login, install the app at a stable location such as `/Applications` before enabling it. macOS may require approval under System Settings → General → Login Items.
 

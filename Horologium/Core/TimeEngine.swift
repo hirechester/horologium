@@ -3,6 +3,8 @@ import Foundation
 struct TimeEngine {
     var calendar: Calendar = .autoupdatingCurrent
     var now: () -> Date = Date.init
+    var stepMinutes = 15
+    private var stepSeconds: Double { Double(stepMinutes * 60) }
 
     func dayInterval(for date: Date) -> DateInterval {
         calendar.dateInterval(of: .day, for: date)!
@@ -16,15 +18,15 @@ struct TimeEngine {
 
     func instant(on day: Date, step: Double) -> Date {
         let interval = dayInterval(for: day)
-        return interval.start.addingTimeInterval(min(max(step.rounded(), 0), maximumStep(on: day)) * 900)
+        return interval.start.addingTimeInterval(min(max(step.rounded(), 0), maximumStep(on: day)) * stepSeconds)
     }
 
     func maximumStep(on day: Date) -> Double {
-        (dayInterval(for: day).duration / 900) - 1
+        ceil(dayInterval(for: day).duration / stepSeconds) - 1
     }
 
     func step(for date: Date) -> Double {
-        date.timeIntervalSince(dayInterval(for: date).start) / 900
+        date.timeIntervalSince(dayInterval(for: date).start) / stepSeconds
     }
 
     func monthDays(containing date: Date) -> [Date] {
@@ -66,6 +68,37 @@ enum ClockText {
         case .twentyFourHour: formatter.dateFormat = "HH:mm"
         }
         return formatter.string(from: date)
+    }
+
+    static func menuTitle(_ date: Date, preferences p: Preferences,
+                          calendar: Calendar = .autoupdatingCurrent, locale: Locale = .autoupdatingCurrent) -> String {
+        var parts: [String] = []
+        if p.showWeekNumber { parts.append("W\(calendar.component(.weekOfYear, from: date))") }
+        let template = (p.showDayOfWeek ? "EEE" : "") + (p.showDate ? (p.showMonth ? "MMMd" : "d") : "")
+        if !template.isEmpty {
+            let f = DateFormatter()
+            f.locale = locale
+            f.calendar = calendar
+            f.timeZone = calendar.timeZone
+            f.setLocalizedDateFormatFromTemplate(template)
+            parts.append(f.string(from: date))
+        }
+        if p.showTime {
+            let f = DateFormatter()
+            f.locale = locale
+            f.timeZone = calendar.timeZone
+            let hour: String
+            switch p.clockFormat {
+            case .system:
+                let systemPattern = DateFormatter.dateFormat(fromTemplate: "j", options: 0, locale: locale) ?? "HH"
+                hour = systemPattern.contains("a") || systemPattern.contains("h") ? "h" : "HH"
+            case .twelveHour: hour = "h"
+            case .twentyFourHour: hour = "HH"
+            }
+            f.dateFormat = hour + ":mm" + (p.showSeconds ? ":ss" : "") + (hour == "h" && p.showAMPM ? " a" : "")
+            parts.append(f.string(from: date))
+        }
+        return parts.joined(separator: "  ")
     }
 
     static func date(_ date: Date, zone: TimeZone = .autoupdatingCurrent, template: String = "EEE MMM d") -> String {

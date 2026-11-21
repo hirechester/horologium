@@ -16,6 +16,7 @@ struct Horologium {
 @MainActor
 final class AppDelegate: NSObject, NSApplicationDelegate {
     private let store = AppStore()
+    private let settingsNavigation = SettingsNavigation()
     private var statusItem: NSStatusItem!
     private let popover = NSPopover()
     private var settingsWindow: NSWindow?
@@ -26,11 +27,12 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         configureMenu()
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
         statusItem.button?.target = self
-        statusItem.button?.action = #selector(togglePopover)
+        statusItem.button?.action = #selector(statusItemClicked)
+        _ = statusItem.button?.sendAction(on: [.leftMouseUp, .rightMouseUp])
         statusItem.button?.setAccessibilityLabel("Horologium calendar and world clocks")
         statusItem.button?.font = .monospacedDigitSystemFont(ofSize: NSFont.systemFontSize, weight: .regular)
         popover.behavior = .transient
-        let controller = NSHostingController(rootView: PopoverView(store: store) { [weak self] in self?.showSettings() })
+        let controller = NSHostingController(rootView: PopoverView(store: store) { [weak self] in self?.showLocationSettings() })
         controller.sizingOptions = [.preferredContentSize]
         popover.contentViewController = controller
         store.$now.combineLatest(store.$preferences).sink { [weak self] _, _ in
@@ -38,21 +40,43 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             DispatchQueue.main.async {
                 self?.updateTitle()
                 self?.updateAppearance()
+                self?.configureTimer()
             }
         }.store(in: &subscriptions)
         updateTitle()
         updateAppearance()
-        let timer = Timer(fire: Date(timeIntervalSince1970: (Date().timeIntervalSince1970 / 60).rounded(.down) * 60 + 60), interval: 60, repeats: true) { [weak self] _ in
-            MainActor.assumeIsolated { self?.store.refresh() }
-        }
-        timer.tolerance = 0.5
-        RunLoop.main.add(timer, forMode: .common)
-        self.timer = timer
+        configureTimer()
         NSWorkspace.shared.notificationCenter.addObserver(self, selector: #selector(environmentChanged), name: NSWorkspace.didWakeNotification, object: nil)
         for name in [NSNotification.Name.NSSystemTimeZoneDidChange, NSLocale.currentLocaleDidChangeNotification,
                      NSNotification.Name.NSSystemClockDidChange] {
             NotificationCenter.default.addObserver(self, selector: #selector(environmentChanged), name: name, object: nil)
         }
+    }
+
+    private func configureTimer() {
+        let interval: TimeInterval = store.preferences.showTime && store.preferences.showSeconds ? 1 : 60
+        guard timer?.timeInterval != interval else { return }
+        timer?.invalidate()
+        let next = (Date().timeIntervalSince1970 / interval).rounded(.down) * interval + interval
+        let timer = Timer(fire: Date(timeIntervalSince1970: next), interval: interval, repeats: true) { [weak self] _ in
+            MainActor.assumeIsolated { self?.store.refresh() }
+        }
+        timer.tolerance = interval == 1 ? 0.05 : 0.5
+        RunLoop.main.add(timer, forMode: .common)
+        self.timer = timer
+    }
+
+    @objc private func statusItemClicked() {
+        let event = NSApplication.shared.currentEvent
+        if event?.type == .rightMouseUp || event?.modifierFlags.contains(.control) == true {
+            popover.performClose(nil)
+            guard let button = statusItem.button else { return }
+            let menu = NSMenu()
+            menu.addItem(withTitle: "Settings…", action: #selector(showSettings), keyEquivalent: ",").target = self
+            menu.addItem(.separator())
+            menu.addItem(withTitle: "Quit Horologium", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q")
+            menu.popUp(positioning: nil, at: NSPoint(x: 0, y: button.bounds.minY), in: button)
+        } else { togglePopover() }
     }
 
     private func updateAppearance() {
@@ -70,9 +94,13 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private func updateTitle() {
         let title = store.menuTitle
         if statusItem.button?.title != title { statusItem.button?.title = title }
+        statusItem.button?.image = title.isEmpty ? NSImage(systemSymbolName: "clock", accessibilityDescription: "Horologium") : nil
     }
 
     @objc private func environmentChanged() {
+        timer?.invalidate()
+        timer = nil
+        configureTimer()
         store.refresh()
         store.objectWillChange.send()
         updateTitle()
@@ -90,13 +118,18 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
 
+    private func showLocationSettings() {
+        settingsNavigation.tab = .locations
+        showSettings()
+    }
+
     @objc private func showSettings() {
         popover.performClose(nil)
         if settingsWindow == nil {
             let window = NSWindow(contentRect: NSRect(x: 0, y: 0, width: 540, height: 600),
                                   styleMask: [.titled, .closable, .miniaturizable], backing: .buffered, defer: false)
             window.title = "Horologium Settings"
-            window.contentViewController = NSHostingController(rootView: SettingsView(store: store))
+            window.contentViewController = NSHostingController(rootView: SettingsView(store: store, navigation: settingsNavigation))
             window.isReleasedWhenClosed = false
             window.center()
             settingsWindow = window

@@ -7,18 +7,65 @@ enum AppearanceMode: String, Codable, CaseIterable, Identifiable {
     var title: String { rawValue.capitalized }
 }
 
+enum WeekStart: Int, Codable, CaseIterable, Identifiable {
+    case system = 0, sunday, monday, tuesday, wednesday, thursday, friday, saturday
+    var id: Self { self }
+    var title: String { self == .system ? "System" : Calendar.autoupdatingCurrent.weekdaySymbols[rawValue - 1] }
+}
+
+enum TravelInterval: Int, Codable, CaseIterable, Identifiable {
+    case fifteen = 15, thirty = 30, sixty = 60
+    var id: Self { self }
+    var title: String { "\(rawValue) minutes" }
+}
+
+enum DropdownSection: String, Codable, CaseIterable, Identifiable {
+    case calendar, timeTravel, timeZones
+    var id: Self { self }
+    var title: String {
+        switch self {
+        case .calendar: "Calendar"
+        case .timeTravel: "Time travel"
+        case .timeZones: "Time zones"
+        }
+    }
+}
+
 struct Preferences: Codable, Equatable {
     var showDate = true
+    var showWeekNumber = false
+    var showDayOfWeek = true
+    var showMonth = true
+    var showTime = true
+    var showSeconds = false
+    var showAMPM = true
     var clockFormat = ClockFormat.system
     var appearance = AppearanceMode.system
+    var weekStart = WeekStart.system
+    var travelInterval = TravelInterval.thirty
+    var sectionOrder = DropdownSection.allCases
 
     init() {}
-    private enum CodingKeys: String, CodingKey { case showDate, clockFormat, appearance }
+    private enum CodingKeys: String, CodingKey {
+        case showDate, showWeekNumber, showDayOfWeek, showMonth, showTime, showSeconds, showAMPM
+        case clockFormat, appearance, weekStart, travelInterval, sectionOrder
+    }
     init(from decoder: Decoder) throws {
-        let values = try decoder.container(keyedBy: CodingKeys.self)
-        showDate = try values.decodeIfPresent(Bool.self, forKey: .showDate) ?? true
-        clockFormat = try values.decodeIfPresent(ClockFormat.self, forKey: .clockFormat) ?? .system
-        appearance = try values.decodeIfPresent(AppearanceMode.self, forKey: .appearance) ?? .system
+        let v = try decoder.container(keyedBy: CodingKeys.self)
+        showDate = try v.decodeIfPresent(Bool.self, forKey: .showDate) ?? true
+        showWeekNumber = try v.decodeIfPresent(Bool.self, forKey: .showWeekNumber) ?? false
+        showDayOfWeek = try v.decodeIfPresent(Bool.self, forKey: .showDayOfWeek) ?? showDate
+        showMonth = try v.decodeIfPresent(Bool.self, forKey: .showMonth) ?? true
+        showTime = try v.decodeIfPresent(Bool.self, forKey: .showTime) ?? true
+        showSeconds = try v.decodeIfPresent(Bool.self, forKey: .showSeconds) ?? false
+        showAMPM = try v.decodeIfPresent(Bool.self, forKey: .showAMPM) ?? true
+        clockFormat = try v.decodeIfPresent(ClockFormat.self, forKey: .clockFormat) ?? .system
+        appearance = try v.decodeIfPresent(AppearanceMode.self, forKey: .appearance) ?? .system
+        weekStart = try v.decodeIfPresent(WeekStart.self, forKey: .weekStart) ?? .system
+        travelInterval = try v.decodeIfPresent(TravelInterval.self, forKey: .travelInterval) ?? .thirty
+        let order = try v.decodeIfPresent([DropdownSection].self, forKey: .sectionOrder) ?? DropdownSection.allCases
+        sectionOrder = []
+        for section in order + DropdownSection.allCases where !sectionOrder.contains(section) { sectionOrder.append(section) }
     }
 }
 
@@ -32,13 +79,14 @@ final class AppStore: ObservableObject {
     @Published var storageWarning: String?
     private let defaults: UserDefaults
     private let clock: () -> Date
-    var engine: TimeEngine { TimeEngine(now: clock) }
+    var engine: TimeEngine {
+        var calendar = Calendar.autoupdatingCurrent
+        if preferences.weekStart != .system { calendar.firstWeekday = preferences.weekStart.rawValue }
+        return TimeEngine(calendar: calendar, now: clock, stepMinutes: preferences.travelInterval.rawValue)
+    }
     var displayedDate: Date { previewDate ?? now }
     var selectedDate: Date { previewDate ?? now }
-    var menuTitle: String {
-        let time = ClockText.time(now, format: preferences.clockFormat)
-        return preferences.showDate ? "\(ClockText.date(now, template: "EEE MMM d"))  \(time)" : time
-    }
+    var menuTitle: String { ClockText.menuTitle(now, preferences: preferences) }
 
     private struct State: Codable {
         var version = 1
