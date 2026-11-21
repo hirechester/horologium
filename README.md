@@ -1,148 +1,114 @@
-# Horologium
+<p align="center">
+  <img src="Artwork/logo-horologium.png" width="144" alt="Horologium sundial logo">
+</p>
 
-A native macOS menu bar calendar and world clock app from Ardens. Requires **macOS 26+ on Apple silicon**.
+<h1 align="center">Horologium</h1>
 
-Click the date and time in the menu bar to browse a month, check your saved locations, or slide through a day to compare times across the world. City search works offline, and clocks can have personal labels such as “London office.”
+<p align="center">
+  A calendar and world clocks, right in your Mac’s menu bar.<br>
+  <strong>macOS 26+ · Apple silicon · Works offline</strong>
+</p>
 
-## Features
+Click the menu bar to browse your calendar, see the time where your people are, and compare times across locations. Horologium stays in the menu bar, with a compact dropdown and no Dock icon.
 
-- Compact month calendar with system week-start conventions and keyboard navigation.
-- Offline search across 34,248 GeoNames cities, plus manual IANA time-zone selection.
-- Custom clock labels, optional native macOS emoji, editing, removal, and reordering.
-- Searchable native emoji picker defaulting to Country flags, with All emoji and category filters.
-- A plain time-travel slider with 15/30/60-minute snapping (30 by default) and automatic daylight-saving handling.
-- Local dates and time differences for every location, including fractional-hour offsets.
-- System, 12-hour, and 24-hour formats; system or custom week start; optional start at login.
-- Optional 🗓️ Calendar icon only mode clears and disables the text toggles. Turning it off restores default date/time visibility.
-- Independent menu bar toggles for week number, weekday, date, month, time, seconds, and AM/PM.
-- A shortcut to macOS clock settings below the format toggles. macOS keeps its native clock visible; Horologium does not modify system clock preferences.
-- Reorder Calendar, Time Travel, and Time Zones in Settings → Layout.
-- System-following appearance by default, with Light/Dark overrides and VoiceOver labels.
-- System accent color by default, or a custom accent chosen with the native macOS color picker in General settings.
-- Local preferences only. No accounts, calendar permissions, event notifications, analytics, or runtime network requests.
+| Light | Dark |
+| :---: | :---: |
+| <img src="docs/previews/01-calendar-and-world-clocks.png" width="330" alt="Month calendar, time-travel slider, and world clocks in light mode"> | <img src="docs/previews/05-dark-mode.png" width="330" alt="Horologium’s dropdown in dark mode"> |
 
-The menu bar always shows live time. Selecting a day or moving the slider previews the same instant in every location. **Now** resets the preview; reopening the dropdown also returns to live time. Spring-forward days omit nonexistent hours, and fall-back days include both occurrences of repeated hours, identified by their GMT offsets.
+*App previews are rendered from the actual SwiftUI views with sample locations.*
 
-## App previews
+## A calendar one click away
 
-Rendered from the actual SwiftUI views with sample locations (not desktop screenshots).
+- Browse a date-only month calendar, with today highlighted and quick month navigation.
+- Follow your Mac’s first day of the week, or choose your own.
+- Navigate with the arrow keys and press Space to return to today and the current time.
+- Open a rounded, arrowless panel that dismisses when you click outside or press Escape.
 
-| Calendar and world clocks | Time travel |
-| --- | --- |
-| ![Calendar and world clocks](docs/previews/01-calendar-and-world-clocks.png) | ![Time travel](docs/previews/02-time-travel.png) |
+## World clocks for your people
 
-| Dark appearance | Native emoji picker |
-| --- | --- |
-| ![Dark appearance](docs/previews/05-dark-mode.png) | ![Native emoji picker](docs/previews/06-native-emoji-picker.png) |
+Find a city, give it a familiar name, and keep its local time close at hand.
 
-![Settings with Horologium artwork](docs/previews/03-settings.png)
+- Search more than **34,000 cities offline**, or pick a time zone manually.
+- Use custom labels such as **London office**, **Alice**, or **Home**.
+- Add a native macOS emoji, with country flags as the picker’s starting category.
+- See each location’s time, local date, and difference from your Mac’s time.
+- Drag locations into your preferred order.
+- Let macOS handle daylight saving and fractional-hour time zones automatically.
 
-[Custom location editor](docs/previews/07-custom-location.png)
+| Custom locations and labels | Searchable native emoji |
+| :---: | :---: |
+| <img src="docs/previews/07-custom-location.png" width="360" alt="Location editor with city search, an emoji, and a custom label"> | <img src="docs/previews/06-native-emoji-picker.png" width="330" alt="Native emoji picker showing searchable country flags"> |
 
-| Menu bar preferences | Section order |
-| --- | --- |
-| ![Menu bar preferences](docs/previews/08-menu-bar-settings.png) | ![Section order](docs/previews/10-layout-settings.png) |
+## Compare times with time travel
 
-[Week start and slider intervals](docs/previews/09-calendar-settings.png) · [Locations](docs/previews/11-location-settings.png) · [Reordered dropdown example](docs/previews/12-reordered-sections.png)
+Select a calendar day, then slide through its hours to see the same instant in every saved location. It’s a quick way to find a good time for a call or check what a future time means elsewhere.
 
-[Custom accent](docs/previews/20-custom-accent.png) · [Accent settings](docs/previews/19-custom-accent-settings.png) · [Calendar icon only](docs/previews/18-calendar-icon-only.png) · [About](docs/previews/13-about.png) · [About in dark mode](docs/previews/14-about-dark.png)
+Choose **15-, 30-, or 60-minute intervals**. The default is 30 minutes. Click **Now** to return to live time; reopening the dropdown also resets it. When displayed, the menu bar clock keeps showing the actual current time while you explore.
 
-## Build and run
+<p align="center">
+  <img src="docs/previews/02-time-travel.png" width="352" alt="Time travel comparing an afternoon in New York with evening in London and the following morning in Tokyo">
+</p>
 
-Open `Horologium.xcodeproj` in Xcode 26 or later, choose the **Horologium** scheme and **My Mac**, then Run. Development does not require a paid Developer Program membership. Use **Sign to Run Locally** if Xcode requests signing configuration.
+## Make the menu bar yours
 
-Or use the bundled scripts (Xcode is selected per command without changing the system developer directory):
+Choose exactly what appears before you open the dropdown:
 
-```sh
-./scripts/build.sh
-open build/DerivedData/Build/Products/Debug/Horologium.app
-./scripts/test.sh
-```
+- Week number, day of the week, date, and month.
+- Time, optional seconds, and AM/PM symbols.
+- System, 12-hour, or 24-hour clock format.
+- **🗓️ Calendar icon only** for a compact menu bar item.
 
-The app lives in the menu bar and does not display a Dock icon. Right-click (or Control-click) the menu bar item for Settings and Quit. The dropdown has no app header or settings footer. If all menu bar text is disabled, a small clock icon keeps the app accessible. Arrow keys move the calendar selection by a day or week; Space returns to now. Command-comma opens Settings. The plus button opens the Locations settings. Clock format and week start follow the Mac’s system preferences by default; both can be overridden independently.
+Right-click the menu bar item for **Settings** and **Quit**. A shortcut in Settings opens the native macOS clock settings, and you can hold **⌘ Command** while dragging menu bar items to rearrange them.
 
-For start at login, install the app at a stable location such as `/Applications` before enabling it. macOS may require approval under System Settings → General → Login Items.
+| Date and time options | Calendar icon only |
+| :---: | :---: |
+| <img src="docs/previews/08-menu-bar-settings.png" width="360" alt="Menu bar display toggles and a link to macOS clock settings"> | <img src="docs/previews/18-calendar-icon-only.png" width="360" alt="Calendar icon only enabled, with the text-format options turned off"> |
 
-## Installer packages
+## Put things in your order
 
-Create a local installer for development:
+Arrange **Calendar**, **Time travel**, and **Time zones** however you prefer. Drag the sections in Layout settings, or use the arrow buttons. Your saved locations have their own order too.
 
-```sh
-./scripts/package.sh --local
-```
+| Section order | World clocks first |
+| :---: | :---: |
+| <img src="docs/previews/10-layout-settings.png" width="360" alt="Layout settings for reordering the three dropdown sections"> | <img src="docs/previews/12-reordered-sections.png" width="330" alt="Dropdown arranged with world clocks above the calendar"> |
 
-Output: `build/packages/Horologium-1.0.8-build9-local.pkg`. This contains an ad hoc signed app; the package is **not Developer ID signed or notarized** and is for local development.
+## Match your Mac—or choose your own look
 
-Once Ardens' Apple Developer Program membership is active:
+Follow the system’s appearance and accent color, or choose **Light**, **Dark**, and a **custom accent**. The custom color uses the native macOS color picker and is remembered when you switch back to System.
 
-1. Create **Developer ID Application** and **Developer ID Installer** certificates in the account and import them into Keychain.
-2. Store notarization credentials using `xcrun notarytool store-credentials Ardens-notary` and follow its interactive prompts. Do not commit credentials.
-3. Run the release workflow with your actual certificate names:
+Horologium also includes VoiceOver labels and keyboard navigation.
 
-```sh
-export APPLICATION_IDENTITY='Developer ID Application: YOUR LEGAL NAME (TEAMID)'
-export INSTALLER_IDENTITY='Developer ID Installer: YOUR LEGAL NAME (TEAMID)'
-export NOTARY_PROFILE='Ardens-notary'
-./scripts/package.sh --release
-```
+| Native color picker | Custom accent in dark mode |
+| :---: | :---: |
+| <img src="docs/previews/19-custom-accent-settings.png" width="360" alt="General settings with a custom accent color selected in the native color well"> | <img src="docs/previews/21-custom-accent-dark.png" width="330" alt="Dark dropdown with a purple calendar selection and matching controls"> |
 
-The script builds an arm64 release app, signs it with hardened runtime and a secure timestamp, signs the installer, submits it for notarization, staples the ticket, and verifies the result. The installer places the app in `/Applications`. The bundle and package identifier is **`app.ardens.horologium`**. The test bundle is `app.ardens.horologium.tests`.
+## Take your setup to another Mac
 
-Quit an existing Horologium process before installing an updated build, then reopen the app. Automatic updates and App Store distribution are outside this version.
+Use **Settings → General → Export Settings…** to save a readable JSON file. Transfer it to another Mac and choose **Import Settings…**.
 
-## Move settings between Macs
+The file carries your locations, labels, emoji, colors, menu bar options, calendar preferences, and section order. Import shows a confirmation before replacing the current configuration. The format is versioned, with compatibility tests for older files.
 
-In **Settings → General**, choose **Export Settings…** to save a readable JSON file. Transfer that file to another Mac, choose **Import Settings…**, review the location count, and confirm **Replace Settings**.
+Start at login is configured separately on each Mac.
 
-The file includes saved locations in order (including labels and emoji), menu bar options, calendar preferences, section order, appearance, and custom accent colors. System-following options use the destination Mac's system settings. Start at login is an OS registration and stays unchanged on each Mac.
+<p align="center">
+  <img src="docs/previews/03-settings.png" width="480" alt="General settings with Import Settings and Export Settings buttons">
+</p>
 
-Import replaces the current portable configuration; it does not merge locations. Invalid or unsupported files leave current settings untouched. A copy of the previous local state is retained under the `horologium.beforeImport` UserDefaults key. Temporary calendar/time-travel state is not exported.
+## Works offline
 
-The JSON format has an app identifier and format version, plus optional export/app-version metadata. New portable fields must be included and older files kept compatible; the project requirement is recorded in [AGENTS.md](AGENTS.md). Files are limited to 2 MB.
+Calendar browsing, world clocks, city search, emoji search, time travel, and settings transfer all work without an internet connection. Settings are stored locally on your Mac. There are no accounts, analytics, or calendar-access permissions to set up.
 
-## Versioning
+You can also enable **Start Horologium at login** in General settings.
 
-The current version is **1.0.8 (build 9)**. `Version.json` is the source of truth; the Xcode project generator reads it, About reads the built app metadata, and installer filenames include both version and build.
+## Build and try it
 
-Bump the patch version and build once per delivered change:
+Horologium requires **macOS 26 or later on Apple silicon**. Open `Horologium.xcodeproj` in Xcode 26 or later and run the **Horologium** scheme on **My Mac**.
 
-```sh
-python3 scripts/bump-version.py
-```
+See the [development guide](docs/DEVELOPMENT.md) for command-line builds, tests, installer packaging, signing, and notarization. See the [changelog](CHANGELOG.md) for version history.
 
-Use `minor` or `major` for larger releases. The script increments the build number and regenerates Xcode settings. Routine rebuilds and test runs keep the current pair. See [CHANGELOG.md](CHANGELOG.md) for delivered changes.
+## Credits
 
-## Project structure and tests
+- City data: [GeoNames](https://www.geonames.org/), licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
+- Emoji artwork: native macOS emoji. Search names and keywords come from Unicode and CLDR; the [Unicode license](Horologium/Resources/Unicode-LICENSE.txt) is bundled with the app.
 
-SwiftUI views are hosted by an AppKit status item and rounded, arrowless floating panel. `TimeEngine` owns calendar and time-zone calculations; `CityCatalog` handles offline search; `AppStore` persists locations and preferences in UserDefaults. Preview time is temporary. Malformed settings are preserved under a recovery key before fresh defaults are used.
-
-The shared Xcode scheme runs unit tests for DST gaps/overlaps, date boundaries, leap days, fractional offsets, search, persistence, and an injectable clock. Visual tests render the actual SwiftUI views with sample locations into XCTest attachments and `/tmp/horologium-previews`. These previews are not desktop interaction tests. Live popover placement, full-screen Spaces, login-item approval, and signed installation should also be checked on a Mac before public distribution.
-
-The Xcode project has no external package dependencies. After adding source/resource files, regenerate its file list:
-
-```sh
-python3 scripts/generate-project.py
-```
-
-## Artwork and city data
-
-The supplied Horologium logo is in `Artwork/`; the supplied IconKitchen macOS icon is bundled as `AppIcon.icns`.
-
-City data is derived from [GeoNames](https://www.geonames.org/) under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/), with attribution bundled in the app. The catalog covers cities in GeoNames' `cities15000` extract, not every settlement; use the manual time-zone picker for other locations. It includes a pinned dataset snapshot, so the app needs no download at launch. Time-zone rules come from macOS.
-
-To update the bundled catalog, download `cities15000.zip` and `admin1CodesASCII.txt` from [GeoNames' dump directory](https://download.geonames.org/export/dump/), then run:
-
-```sh
-python3 scripts/import-cities.py /path/to/cities15000.zip /path/to/admin1CodesASCII.txt
-```
-
-Update the snapshot date in `Horologium/Resources/GeoNames-attribution.txt` when refreshing the data.
-
-
-Emoji glyphs are rendered by macOS using its native emoji font; no third-party emoji artwork is bundled. Search uses Unicode 16 emoji names and CLDR 46 English keywords, with the Unicode license included in the app. This pinned set supports the minimum macOS version. To refresh the search index:
-
-```sh
-# Download emoji-test.txt from https://unicode.org/Public/emoji/16.0/emoji-test.txt
-# Download en.xml from https://raw.githubusercontent.com/unicode-org/cldr/release-46/common/annotations/en.xml
-python3 scripts/import-emoji.py /path/to/emoji-test.txt /path/to/en.xml
-```
+Built with SwiftUI and AppKit.
