@@ -16,17 +16,18 @@ xcodebuild -project Horologium.xcodeproj -scheme Horologium \
   -configuration Release -derivedDataPath build/Release CODE_SIGNING_ALLOWED=NO build
 app="$PWD/build/Release/Build/Products/Release/Horologium.app"
 version=$(/usr/libexec/PlistBuddy -c 'Print CFBundleShortVersionString' "$app/Contents/Info.plist")
+build_number=$(/usr/libexec/PlistBuddy -c 'Print CFBundleVersion' "$app/Contents/Info.plist")
 mkdir -p build/packages
 if [[ "$mode" == --local ]]; then
   codesign --force --sign - "$app"
-  package="$PWD/build/packages/Horologium-$version-local.pkg"
+  package="$PWD/build/packages/Horologium-$version-build$build_number-local.pkg"
   pkgbuild --component "$app" --install-location /Applications \
     --identifier app.ardens.horologium --version "$version" "$package"
   echo "Local package (not Developer ID signed or notarized): $package"
 else
   codesign --force --options runtime --timestamp --sign "$APPLICATION_IDENTITY" "$app"
   codesign --verify --deep --strict --verbose=2 "$app"
-  package="$PWD/build/packages/Horologium-$version.pkg"
+  package="$PWD/build/packages/Horologium-$version-build$build_number.pkg"
   pkgbuild --component "$app" --install-location /Applications \
     --identifier app.ardens.horologium --version "$version" \
     --sign "$INSTALLER_IDENTITY" "$package"

@@ -42,6 +42,8 @@ Rendered from the actual SwiftUI views with sample locations (not desktop screen
 
 [Week start and slider intervals](docs/previews/09-calendar-settings.png) · [Locations](docs/previews/11-location-settings.png) · [Reordered dropdown example](docs/previews/12-reordered-sections.png)
 
+[About](docs/previews/13-about.png) · [About in dark mode](docs/previews/14-about-dark.png)
+
 ## Build and run
 
 Open `Horologium.xcodeproj` in Xcode 26 or later, choose the **Horologium** scheme and **My Mac**, then Run. Development does not require a paid Developer Program membership. Use **Sign to Run Locally** if Xcode requests signing configuration.
@@ -66,7 +68,7 @@ Create a local installer for development:
 ./scripts/package.sh --local
 ```
 
-Output: `build/packages/Horologium-1.0-local.pkg`. This contains an ad hoc signed app; the package is **not Developer ID signed or notarized** and is for local development.
+Output: `build/packages/Horologium-1.0.1-build2-local.pkg`. This contains an ad hoc signed app; the package is **not Developer ID signed or notarized** and is for local development.
 
 Once Ardens' Apple Developer Program membership is active:
 
@@ -84,6 +86,18 @@ export NOTARY_PROFILE='Ardens-notary'
 The script builds an arm64 release app, signs it with hardened runtime and a secure timestamp, signs the installer, submits it for notarization, staples the ticket, and verifies the result. The installer places the app in `/Applications`. The bundle and package identifier is **`app.ardens.horologium`**. The test bundle is `app.ardens.horologium.tests`.
 
 Quit an existing Horologium process before installing an updated build, then reopen the app. Automatic updates and App Store distribution are outside this version.
+
+## Versioning
+
+The current version is **1.0.1 (build 2)**. `Version.json` is the source of truth; the Xcode project generator reads it, About reads the built app metadata, and installer filenames include both version and build.
+
+Bump the patch version and build once per delivered change:
+
+```sh
+python3 scripts/bump-version.py
+```
+
+Use `minor` or `major` for larger releases. The script increments the build number and regenerates Xcode settings. Routine rebuilds and test runs keep the current pair. See [CHANGELOG.md](CHANGELOG.md) for delivered changes.
 
 ## Project structure and tests
 

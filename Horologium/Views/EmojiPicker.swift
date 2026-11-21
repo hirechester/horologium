@@ -50,8 +50,6 @@ struct EmojiPicker: View {
                 }
                 .id(category + query)
                 .overlay { if matches.isEmpty { ContentUnavailableView.search(text: query) } }
-                Text("\(matches.count) emoji · Country flags appear first")
-                    .font(.caption2).foregroundStyle(.secondary)
             } else if let error {
                 ContentUnavailableView("Emoji unavailable", systemImage: "exclamationmark.triangle", description: Text(error))
             } else {

@@ -72,8 +72,6 @@ struct LocationEditor: View {
             if let chosen {
                 Text("Selected: \(chosen.label) · \(chosen.timeZoneDisplayName)")
                     .font(.caption).foregroundStyle(.secondary).lineLimit(1)
-            } else {
-                Text("Choose a result above.").font(.caption).foregroundStyle(.secondary)
             }
             HStack(alignment: .top, spacing: 10) {
                 VStack(alignment: .leading, spacing: 4) {
@@ -96,10 +94,7 @@ struct LocationEditor: View {
                         .accessibilityLabel("Custom location label")
                 }
             }
-            Text("Leave the label blank to use the city or time-zone name.")
-                .font(.caption2).foregroundStyle(.secondary)
             HStack {
-                Text("Daylight saving adjusts automatically.").font(.caption).foregroundStyle(.secondary)
                 Spacer()
                 Button("Cancel") { dismiss() }.keyboardShortcut(.cancelAction)
                 Button(existing == nil ? "Add" : "Save") { save() }

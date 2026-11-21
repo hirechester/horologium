@@ -4,6 +4,7 @@ import hashlib
 import json
 from pathlib import Path
 root = Path(__file__).resolve().parents[1]
+version = json.loads((root / 'Version.json').read_text())
 objects = {}
 def ident(key): return hashlib.sha1(key.encode()).hexdigest()[:24].upper()
 def add(key, value):
@@ -42,7 +43,7 @@ def configs(key, settings):
         cs.append(add(key+name, obj('XCBuildConfiguration', buildSettings=build, name=name)))
     return add(key+'configs', obj('XCConfigurationList', buildConfigurations=cs, defaultConfigurationIsVisible=0, defaultConfigurationName='Release'))
 project_config = configs('project', {'SDKROOT':'macosx','MACOSX_DEPLOYMENT_TARGET':'26.0','ARCHS':'arm64','SWIFT_VERSION':'6.0','CLANG_ENABLE_MODULES':'YES','ENABLE_TESTABILITY':'YES','CODE_SIGN_STYLE':'Automatic'})
-app_config = configs('app', {'PRODUCT_NAME':'Horologium','PRODUCT_BUNDLE_IDENTIFIER':'app.ardens.horologium','INFOPLIST_FILE':'Horologium/Info.plist','MARKETING_VERSION':'1.0','CURRENT_PROJECT_VERSION':'1','ENABLE_HARDENED_RUNTIME':'YES','LD_RUNPATH_SEARCH_PATHS':'$(inherited) @executable_path/../Frameworks'})
+app_config = configs('app', {'PRODUCT_NAME':'Horologium','PRODUCT_BUNDLE_IDENTIFIER':'app.ardens.horologium','INFOPLIST_FILE':'Horologium/Info.plist','MARKETING_VERSION':version['version'],'CURRENT_PROJECT_VERSION':str(version['build']),'ENABLE_HARDENED_RUNTIME':'YES','LD_RUNPATH_SEARCH_PATHS':'$(inherited) @executable_path/../Frameworks'})
 test_config = configs('test', {'PRODUCT_NAME':'HorologiumTests','PRODUCT_BUNDLE_IDENTIFIER':'app.ardens.horologium.tests','GENERATE_INFOPLIST_FILE':'YES','TEST_HOST':'$(BUILT_PRODUCTS_DIR)/Horologium.app/Contents/MacOS/Horologium','BUNDLE_LOADER':'$(TEST_HOST)','LD_RUNPATH_SEARCH_PATHS':'$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks'})
 app_target = add('app-target', obj('PBXNativeTarget', buildConfigurationList=app_config, buildPhases=app_phases, buildRules=[], dependencies=[], name='Horologium', productName='Horologium', productReference=app_product, productType='com.apple.product-type.application'))
 proxy = add('proxy', obj('PBXContainerItemProxy', containerPortal=ident('project'), proxyType=1, remoteGlobalIDString=app_target, remoteInfo='Horologium'))

@@ -14,7 +14,7 @@ struct SettingsView: View {
     @State private var loginEnabled = SMAppService.mainApp.status == .enabled
     @State private var loginError: String?
 
-    enum Tab: String, CaseIterable { case general, menuBar, calendar, layout, locations }
+    enum Tab: String, CaseIterable { case general, menuBar, calendar, layout, locations, about }
     @ObservedObject private var navigation: SettingsNavigation
     @State private var selectedSection: DropdownSection?
 
@@ -25,16 +25,13 @@ struct SettingsView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
-            HStack(spacing: 12) {
-                Image(nsImage: NSImage(contentsOf: Bundle.main.url(forResource: "Logo", withExtension: "png")!)!).resizable().scaledToFit().frame(width: 40, height: 40)
-                Text("Horologium").font(.title2.weight(.semibold))
-            }
             Picker("Settings category", selection: $navigation.tab) {
                 Text("General").tag(Tab.general)
                 Text("Menu Bar").tag(Tab.menuBar)
                 Text("Calendar").tag(Tab.calendar)
                 Text("Layout").tag(Tab.layout)
                 Text("Locations").tag(Tab.locations)
+                Text("About").tag(Tab.about)
             }.pickerStyle(.segmented).labelsHidden()
             Group {
                 switch navigation.tab {
@@ -43,14 +40,10 @@ struct SettingsView: View {
                 case .calendar: calendar
                 case .layout: layout
                 case .locations: locations
+                case .about: about
                 }
             }.frame(maxWidth: .infinity, maxHeight: .infinity)
             if let warning = store.storageWarning { Text(warning).font(.caption).foregroundStyle(.orange) }
-            HStack {
-                Text("Version 1.0").font(.caption).foregroundStyle(.secondary)
-                Spacer()
-                Link("City data: GeoNames", destination: URL(string: "https://www.geonames.org/")!).font(.caption)
-            }
         }
         .padding(24).frame(width: 540, height: 600)
         .background(Color(nsColor: .windowBackgroundColor))
@@ -123,8 +116,7 @@ struct SettingsView: View {
                 Button("Allow in Login Items Settings…") { SMAppService.openSystemSettingsLoginItems() }
             }
             if let loginError { Text(loginError).foregroundStyle(.red).font(.caption) }
-            Text("System follows your Mac’s clock and appearance preferences.").font(.caption).foregroundStyle(.secondary)
-        }.formStyle(.grouped)
+        }.formStyle(.grouped).scrollContentBackground(.hidden)
     }
 
     private var menuBar: some View {
@@ -143,7 +135,7 @@ struct SettingsView: View {
                 Text(store.menuTitle.isEmpty ? "Clock icon" : store.menuTitle)
                     .font(.system(.body, design: .monospaced)).accessibilityLabel("Menu bar preview")
             } header: { Text("Preview") }
-        }.formStyle(.grouped).toggleStyle(.switch)
+        }.formStyle(.grouped).scrollContentBackground(.hidden).toggleStyle(.switch)
     }
 
     private var calendar: some View {
@@ -154,15 +146,16 @@ struct SettingsView: View {
             Picker("Time travel interval", selection: $store.preferences.travelInterval) {
                 ForEach(TravelInterval.allCases) { Text($0.title).tag($0) }
             }
-            Text("System uses your Mac’s first day of the week. Time travel snaps to the chosen interval without tick marks.")
-                .font(.caption).foregroundStyle(.secondary)
-        }.formStyle(.grouped)
+        }.formStyle(.grouped).scrollContentBackground(.hidden)
     }
 
     private var layout: some View {
         VStack(alignment: .leading, spacing: 14) {
-            Text("Dropdown section order").font(.headline)
-            Text("Drag sections, or select one and use the arrows.").font(.caption).foregroundStyle(.secondary)
+            HStack {
+                Text("Dropdown section order").font(.headline)
+                Spacer()
+                Text("Drag to reorder").font(.caption).foregroundStyle(.secondary)
+            }
             List(selection: $selectedSection) {
                 ForEach(store.preferences.sectionOrder) { section in
                     Text(section.title).padding(.vertical, 8).tag(section)
@@ -179,6 +172,23 @@ struct SettingsView: View {
             }
             Spacer()
         }.padding(16)
+    }
+
+    private var about: some View {
+        VStack(spacing: 16) {
+            Spacer()
+            Image(nsImage: NSImage(contentsOf: Bundle.main.url(forResource: "Logo", withExtension: "png")!)!)
+                .resizable().scaledToFit().frame(width: 110, height: 110)
+            Text("Horologium").font(.largeTitle.weight(.semibold))
+            Text("Version \(Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "—") (build \(Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String ?? "—"))")
+                .font(.subheadline).foregroundStyle(.secondary)
+            Text("Ardens").foregroundStyle(.secondary)
+            Link("City data by GeoNames", destination: URL(string: "https://www.geonames.org/")!)
+            Link("Creative Commons Attribution 4.0", destination: URL(string: "https://creativecommons.org/licenses/by/4.0/")!)
+                .font(.caption).foregroundStyle(.secondary)
+            Link("GitHub repository", destination: URL(string: "https://github.com/hirechester/horologium")!)
+            Spacer()
+        }.frame(maxWidth: .infinity).padding(16)
     }
 
     private var sectionIndex: Int? { store.preferences.sectionOrder.firstIndex { $0 == selectedSection } }
