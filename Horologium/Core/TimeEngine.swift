@@ -72,6 +72,7 @@ enum ClockText {
 
     static func menuTitle(_ date: Date, preferences p: Preferences,
                           calendar: Calendar = .autoupdatingCurrent, locale: Locale = .autoupdatingCurrent) -> String {
+        if p.calendarIconOnly { return "🗓️" }
         var parts: [String] = []
         if p.showWeekNumber { parts.append("W\(calendar.component(.weekOfYear, from: date))") }
         let template = (p.showDayOfWeek ? "EEE" : "") + (p.showDate ? (p.showMonth ? "MMMd" : "d") : "")

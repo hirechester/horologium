@@ -77,6 +77,42 @@ final class DisplayPreferencesTests: XCTestCase {
         XCTAssertEqual(restored.engine.stepMinutes, 60)
     }
 
+    func testCalendarIconOnlyClearsFormatsAndRestoresDefaults() {
+        var p = Preferences()
+        p.showWeekNumber = true
+        p.showSeconds = true
+        p.clockFormat = .twentyFourHour
+        p.appearance = .dark
+        p.setCalendarIconOnly(true)
+        XCTAssertEqual(title(p), "🗓️")
+        XCTAssertTrue(p.calendarIconOnly)
+        XCTAssertFalse([p.showDate, p.showWeekNumber, p.showDayOfWeek, p.showMonth,
+                        p.showTime, p.showSeconds, p.showAMPM].contains(true))
+        XCTAssertEqual(p.clockFormat, .twentyFourHour)
+        XCTAssertEqual(p.appearance, .dark)
+        p.setCalendarIconOnly(false)
+        XCTAssertFalse(p.calendarIconOnly)
+        XCTAssertTrue(p.showDate && p.showDayOfWeek && p.showMonth && p.showTime && p.showAMPM)
+        XCTAssertFalse(p.showSeconds || p.showWeekNumber)
+        XCTAssertNotEqual(title(p), "🗓️")
+    }
+
+    @MainActor func testCalendarIconOnlyPersistsAndLegacySettingsKeepText() throws {
+        let suite = "HorologiumTests.\(UUID())"
+        let defaults = UserDefaults(suiteName: suite)!
+        defer { defaults.removePersistentDomain(forName: suite) }
+        let store = AppStore(defaults: defaults)
+        var preferences = store.preferences
+        preferences.setCalendarIconOnly(true)
+        store.preferences = preferences
+        let restored = AppStore(defaults: defaults)
+        XCTAssertTrue(restored.preferences.calendarIconOnly)
+        XCTAssertEqual(restored.menuTitle, "🗓️")
+        let legacy = try JSONDecoder().decode(Preferences.self, from: Data("{}".utf8))
+        XCTAssertFalse(legacy.calendarIconOnly)
+        XCTAssertNotEqual(title(legacy), "🗓️")
+    }
+
     func testIntervalsOnShortLongAndHalfHourDSTDays() {
         for minutes in [15, 30, 60] {
             var engine = TimeEngine(calendar: calendar, stepMinutes: minutes)

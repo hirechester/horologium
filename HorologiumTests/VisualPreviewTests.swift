@@ -39,6 +39,10 @@ final class VisualPreviewTests: XCTestCase {
         store.locations = []
         store.returnToNow()
         try render(PopoverView(store: store, openLocations: {}), name: "04-first-launch", width: 352)
+        var preferences = store.preferences
+        preferences.setCalendarIconOnly(true)
+        store.preferences = preferences
+        try render(SettingsView(store: store, initialTab: .menuBar), name: "18-calendar-icon-only", width: 540)
     }
 
     @MainActor func testSettingsTabWidthsRemainStableAcrossSelections() async throws {

@@ -32,6 +32,7 @@ enum DropdownSection: String, Codable, CaseIterable, Identifiable {
 }
 
 struct Preferences: Codable, Equatable {
+    var calendarIconOnly = false
     var showDate = true
     var showWeekNumber = false
     var showDayOfWeek = true
@@ -47,11 +48,12 @@ struct Preferences: Codable, Equatable {
 
     init() {}
     private enum CodingKeys: String, CodingKey {
-        case showDate, showWeekNumber, showDayOfWeek, showMonth, showTime, showSeconds, showAMPM
+        case calendarIconOnly, showDate, showWeekNumber, showDayOfWeek, showMonth, showTime, showSeconds, showAMPM
         case clockFormat, appearance, weekStart, travelInterval, sectionOrder
     }
     init(from decoder: Decoder) throws {
         let v = try decoder.container(keyedBy: CodingKeys.self)
+        calendarIconOnly = try v.decodeIfPresent(Bool.self, forKey: .calendarIconOnly) ?? false
         showDate = try v.decodeIfPresent(Bool.self, forKey: .showDate) ?? true
         showWeekNumber = try v.decodeIfPresent(Bool.self, forKey: .showWeekNumber) ?? false
         showDayOfWeek = try v.decodeIfPresent(Bool.self, forKey: .showDayOfWeek) ?? showDate
@@ -66,7 +68,20 @@ struct Preferences: Codable, Equatable {
         let order = try v.decodeIfPresent([DropdownSection].self, forKey: .sectionOrder) ?? DropdownSection.allCases
         sectionOrder = []
         for section in order + DropdownSection.allCases where !sectionOrder.contains(section) { sectionOrder.append(section) }
+        if calendarIconOnly { setCalendarIconOnly(true) }
     }
+
+    mutating func setCalendarIconOnly(_ enabled: Bool) {
+        calendarIconOnly = enabled
+        showWeekNumber = false
+        showDayOfWeek = !enabled
+        showDate = !enabled
+        showMonth = !enabled
+        showTime = !enabled
+        showSeconds = false
+        showAMPM = !enabled
+    }
+
 }
 
 @MainActor

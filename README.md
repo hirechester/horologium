@@ -13,6 +13,7 @@ Click the date and time in the menu bar to browse a month, check your saved loca
 - A plain time-travel slider with 15/30/60-minute snapping (30 by default) and automatic daylight-saving handling.
 - Local dates and time differences for every location, including fractional-hour offsets.
 - System, 12-hour, and 24-hour formats; system or custom week start; optional start at login.
+- Optional 🗓️ Calendar icon only mode clears and disables the text toggles. Turning it off restores default date/time visibility.
 - Independent menu bar toggles for week number, weekday, date, month, time, seconds, and AM/PM.
 - A shortcut to macOS clock settings below the format toggles. macOS keeps its native clock visible; Horologium does not modify system clock preferences.
 - Reorder Calendar, Time Travel, and Time Zones in Settings → Layout.
@@ -43,7 +44,7 @@ Rendered from the actual SwiftUI views with sample locations (not desktop screen
 
 [Week start and slider intervals](docs/previews/09-calendar-settings.png) · [Locations](docs/previews/11-location-settings.png) · [Reordered dropdown example](docs/previews/12-reordered-sections.png)
 
-[About](docs/previews/13-about.png) · [About in dark mode](docs/previews/14-about-dark.png)
+[Calendar icon only](docs/previews/18-calendar-icon-only.png) · [About](docs/previews/13-about.png) · [About in dark mode](docs/previews/14-about-dark.png)
 
 ## Build and run
 
@@ -69,7 +70,7 @@ Create a local installer for development:
 ./scripts/package.sh --local
 ```
 
-Output: `build/packages/Horologium-1.0.4-build5-local.pkg`. This contains an ad hoc signed app; the package is **not Developer ID signed or notarized** and is for local development.
+Output: `build/packages/Horologium-1.0.5-build6-local.pkg`. This contains an ad hoc signed app; the package is **not Developer ID signed or notarized** and is for local development.
 
 Once Ardens' Apple Developer Program membership is active:
 
@@ -90,7 +91,7 @@ Quit an existing Horologium process before installing an updated build, then reo
 
 ## Versioning
 
-The current version is **1.0.4 (build 5)**. `Version.json` is the source of truth; the Xcode project generator reads it, About reads the built app metadata, and installer filenames include both version and build.
+The current version is **1.0.5 (build 6)**. `Version.json` is the source of truth; the Xcode project generator reads it, About reads the built app metadata, and installer filenames include both version and build.
 
 Bump the patch version and build once per delivered change:
 

@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.5 — Build 6
+
+- Added Calendar icon only at the top of Menu Bar settings, showing 🗓️ and clearing/disabling text options.
+- Turning icon-only mode off restores the default date/time options without changing clock format or other preferences.
+
 ## 1.0.4 — Build 5
 
 - Added a Command-drag rearrangement tip beneath the macOS Clock Settings link.
