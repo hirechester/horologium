@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.7 — Build 8
+
+- Added System/Custom accent color selection in General settings, using the native macOS color picker.
+- Applied the accent to the dropdown, settings controls, calendar highlights, and native settings tabs.
+- Preserved custom colors when returning to System, and kept selected calendar dates legible with light colors.
+
 ## 1.0.6 — Build 7
 
 - Replaced the main anchored popover with a rounded, arrowless native panel below the menu bar item.

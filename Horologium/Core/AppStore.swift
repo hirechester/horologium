@@ -42,6 +42,8 @@ struct Preferences: Codable, Equatable {
     var showAMPM = true
     var clockFormat = ClockFormat.system
     var appearance = AppearanceMode.system
+    var accentMode = AccentMode.system
+    var customAccent: SavedAccentColor?
     var weekStart = WeekStart.system
     var travelInterval = TravelInterval.thirty
     var sectionOrder = DropdownSection.allCases
@@ -49,7 +51,7 @@ struct Preferences: Codable, Equatable {
     init() {}
     private enum CodingKeys: String, CodingKey {
         case calendarIconOnly, showDate, showWeekNumber, showDayOfWeek, showMonth, showTime, showSeconds, showAMPM
-        case clockFormat, appearance, weekStart, travelInterval, sectionOrder
+        case clockFormat, appearance, accentMode, customAccent, weekStart, travelInterval, sectionOrder
     }
     init(from decoder: Decoder) throws {
         let v = try decoder.container(keyedBy: CodingKeys.self)
@@ -63,6 +65,8 @@ struct Preferences: Codable, Equatable {
         showAMPM = try v.decodeIfPresent(Bool.self, forKey: .showAMPM) ?? true
         clockFormat = try v.decodeIfPresent(ClockFormat.self, forKey: .clockFormat) ?? .system
         appearance = try v.decodeIfPresent(AppearanceMode.self, forKey: .appearance) ?? .system
+        accentMode = try v.decodeIfPresent(AccentMode.self, forKey: .accentMode) ?? .system
+        customAccent = try v.decodeIfPresent(SavedAccentColor.self, forKey: .customAccent)
         weekStart = try v.decodeIfPresent(WeekStart.self, forKey: .weekStart) ?? .system
         travelInterval = try v.decodeIfPresent(TravelInterval.self, forKey: .travelInterval) ?? .thirty
         let order = try v.decodeIfPresent([DropdownSection].self, forKey: .sectionOrder) ?? DropdownSection.allCases

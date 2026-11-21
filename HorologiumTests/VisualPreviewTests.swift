@@ -16,6 +16,7 @@ final class VisualPreviewTests: XCTestCase {
             SavedLocation(label: "Tokyo", detail: "Tokyo, Japan", timeZoneID: "Asia/Tokyo", emoji: "🇯🇵", sourceName: "Tokyo"),
             SavedLocation(label: "San Francisco", detail: "California, United States", timeZoneID: "America/Los_Angeles", emoji: "🇺🇸", sourceName: "San Francisco")
         ]
+        let sampleLocations = store.locations
         try render(PopoverView(store: store, openLocations: {}), name: "01-calendar-and-world-clocks", width: 352)
         store.travel(step: 32)
         try render(PopoverView(store: store, openLocations: {}), name: "02-time-travel", width: 352)
@@ -43,6 +44,14 @@ final class VisualPreviewTests: XCTestCase {
         preferences.setCalendarIconOnly(true)
         store.preferences = preferences
         try render(SettingsView(store: store, initialTab: .menuBar), name: "18-calendar-icon-only", width: 540)
+        preferences.setCalendarIconOnly(false)
+        preferences.accentMode = .custom
+        preferences.customAccent = SavedAccentColor(red: 0.65, green: 0.19, blue: 0.82)
+        store.preferences = preferences
+        store.locations = sampleLocations
+        try render(SettingsView(store: store), name: "19-custom-accent-settings", width: 540)
+        try render(PopoverView(store: store, openLocations: {}), name: "20-custom-accent", width: 352)
+        try render(PopoverView(store: store, openLocations: {}), name: "21-custom-accent-dark", width: 352, dark: true)
     }
 
     @MainActor func testSettingsTabWidthsRemainStableAcrossSelections() async throws {

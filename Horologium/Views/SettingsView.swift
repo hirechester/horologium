@@ -28,7 +28,7 @@ struct SettingsView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
-            SettingsTabs(selection: $navigation.tab).frame(width: 492, height: 28)
+            SettingsTabs(selection: $navigation.tab, accent: store.preferences.appAccent).frame(width: 492, height: 28)
             Group {
                 switch navigation.tab {
                 case .general: general
@@ -51,6 +51,7 @@ struct SettingsView: View {
             }
         }
         .onAppear { loginEnabled = SMAppService.mainApp.status == .enabled }
+        .modifier(AppAccent(preferences: store.preferences))
     }
 
     private var locations: some View {
@@ -106,6 +107,27 @@ struct SettingsView: View {
             }
             Picker("Appearance", selection: $store.preferences.appearance) {
                 ForEach(AppearanceMode.allCases) { Text($0.title).tag($0) }
+            }
+            Picker("Accent color", selection: Binding(
+                get: { store.preferences.accentMode },
+                set: { mode in
+                    var preferences = store.preferences
+                    preferences.accentMode = mode
+                    if mode == .custom && preferences.customAccent == nil {
+                        preferences.customAccent = SavedAccentColor(nsColor: .controlAccentColor)
+                    }
+                    store.preferences = preferences
+                })) {
+                ForEach(AccentMode.allCases) { Text($0.title).tag($0) }
+            }
+            if store.preferences.accentMode == .custom {
+                ColorPicker("Custom color", selection: Binding(
+                    get: { store.preferences.customAccent?.color ?? Color(nsColor: .controlAccentColor) },
+                    set: { color in
+                        if let saved = SavedAccentColor(nsColor: NSColor(color)) {
+                            store.preferences.customAccent = saved
+                        }
+                    }), supportsOpacity: false)
             }
             Toggle("Start Horologium at login", isOn: Binding(get: { loginEnabled }, set: setLogin))
             if SMAppService.mainApp.status == .requiresApproval {
@@ -233,6 +255,7 @@ private struct LocationEditorState: Identifiable {
 // Fixed segment widths prevent native selection emphasis from shifting adjacent tabs.
 struct SettingsTabs: NSViewRepresentable {
     @Binding var selection: SettingsView.Tab
+    var accent: Color? = nil
 
     func makeNSView(context: Context) -> NSSegmentedControl {
         let control = NSSegmentedControl()
@@ -253,6 +276,7 @@ struct SettingsTabs: NSViewRepresentable {
 
     func updateNSView(_ control: NSSegmentedControl, context: Context) {
         context.coordinator.selection = $selection
+        control.selectedSegmentBezelColor = accent.map { NSColor($0) }
         control.selectedSegment = SettingsView.Tab.allCases.firstIndex(of: selection)!
     }
 

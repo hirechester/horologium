@@ -44,7 +44,7 @@ struct CalendarView: View {
         return Button { store.select(day) } label: {
             Text("\(calendar.component(.day, from: day))")
                 .font(.system(size: 12, weight: selected || today ? .semibold : .regular, design: .rounded))
-                .foregroundStyle(selected ? Color.white : (inMonth ? Color.primary : Color.secondary.opacity(0.55)))
+                .foregroundStyle(selected ? store.preferences.calendarSelectionForeground : (inMonth ? Color.primary : Color.secondary.opacity(0.55)))
                 .frame(maxWidth: .infinity).frame(height: 29)
                 .background {
                     if selected { RoundedRectangle(cornerRadius: 8).fill(Color.accentColor) }

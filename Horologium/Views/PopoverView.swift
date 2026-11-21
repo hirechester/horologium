@@ -30,6 +30,7 @@ struct PopoverView: View {
         .onKeyPress(.upArrow) { store.moveSelection(days: -7); return .handled }
         .onKeyPress(.downArrow) { store.moveSelection(days: 7); return .handled }
         .onKeyPress(.space) { store.returnToNow(); return .handled }
+        .modifier(AppAccent(preferences: store.preferences))
     }
 
     private var timeTravel: some View {

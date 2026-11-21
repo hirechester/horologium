@@ -18,6 +18,7 @@ Click the date and time in the menu bar to browse a month, check your saved loca
 - A shortcut to macOS clock settings below the format toggles. macOS keeps its native clock visible; Horologium does not modify system clock preferences.
 - Reorder Calendar, Time Travel, and Time Zones in Settings → Layout.
 - System-following appearance by default, with Light/Dark overrides and VoiceOver labels.
+- System accent color by default, or a custom accent chosen with the native macOS color picker in General settings.
 - Local preferences only. No accounts, calendar permissions, event notifications, analytics, or runtime network requests.
 
 The menu bar always shows live time. Selecting a day or moving the slider previews the same instant in every location. **Now** resets the preview; reopening the dropdown also returns to live time. Spring-forward days omit nonexistent hours, and fall-back days include both occurrences of repeated hours, identified by their GMT offsets.
@@ -44,7 +45,7 @@ Rendered from the actual SwiftUI views with sample locations (not desktop screen
 
 [Week start and slider intervals](docs/previews/09-calendar-settings.png) · [Locations](docs/previews/11-location-settings.png) · [Reordered dropdown example](docs/previews/12-reordered-sections.png)
 
-[Calendar icon only](docs/previews/18-calendar-icon-only.png) · [About](docs/previews/13-about.png) · [About in dark mode](docs/previews/14-about-dark.png)
+[Custom accent](docs/previews/20-custom-accent.png) · [Accent settings](docs/previews/19-custom-accent-settings.png) · [Calendar icon only](docs/previews/18-calendar-icon-only.png) · [About](docs/previews/13-about.png) · [About in dark mode](docs/previews/14-about-dark.png)
 
 ## Build and run
 
@@ -70,7 +71,7 @@ Create a local installer for development:
 ./scripts/package.sh --local
 ```
 
-Output: `build/packages/Horologium-1.0.6-build7-local.pkg`. This contains an ad hoc signed app; the package is **not Developer ID signed or notarized** and is for local development.
+Output: `build/packages/Horologium-1.0.7-build8-local.pkg`. This contains an ad hoc signed app; the package is **not Developer ID signed or notarized** and is for local development.
 
 Once Ardens' Apple Developer Program membership is active:
 
@@ -91,7 +92,7 @@ Quit an existing Horologium process before installing an updated build, then reo
 
 ## Versioning
 
-The current version is **1.0.6 (build 7)**. `Version.json` is the source of truth; the Xcode project generator reads it, About reads the built app metadata, and installer filenames include both version and build.
+The current version is **1.0.7 (build 8)**. `Version.json` is the source of truth; the Xcode project generator reads it, About reads the built app metadata, and installer filenames include both version and build.
 
 Bump the patch version and build once per delivered change:
 
