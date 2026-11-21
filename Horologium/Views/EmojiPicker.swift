@@ -4,7 +4,7 @@ struct EmojiPicker: View {
     @Binding var selection: String?
     @Environment(\.dismiss) private var dismiss
     @State private var query = ""
-    @State private var category = "All emoji"
+    @State private var category = "Country flags"
     @State private var catalog: EmojiCatalog?
     @State private var error: String?
     private let columns = Array(repeating: GridItem(.flexible(), spacing: 4), count: 8)

@@ -113,6 +113,6 @@ enum ClockText {
         let sign = offset < 0 ? "−" : "+"
         let absolute = abs(offset) / 60
         let gmt = String(format: "GMT%@%02d:%02d", sign, absolute / 60, absolute % 60)
-        return "\(time(date, zone: zone, format: format)) · \(zone.abbreviation(for: date) ?? zone.identifier) · \(gmt)"
+        return "\(time(date, zone: zone, format: format)) · \(zone.abbreviation(for: date) ?? SavedLocation.displayTimeZone(zone.identifier)) · \(gmt)"
     }
 }

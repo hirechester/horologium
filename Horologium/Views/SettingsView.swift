@@ -47,7 +47,7 @@ struct SettingsView: View {
             }.frame(maxWidth: .infinity, maxHeight: .infinity)
             if let warning = store.storageWarning { Text(warning).font(.caption).foregroundStyle(.orange) }
             HStack {
-                Text("Version 1.0 · All settings stay on this Mac").font(.caption).foregroundStyle(.secondary)
+                Text("Version 1.0").font(.caption).foregroundStyle(.secondary)
                 Spacer()
                 Link("City data: GeoNames", destination: URL(string: "https://www.geonames.org/")!).font(.caption)
             }
@@ -76,11 +76,11 @@ struct SettingsView: View {
                     HStack {
                         VStack(alignment: .leading, spacing: 3) {
                             Text(location.displayLabel).fontWeight(.medium)
-                            Text("\(location.detail) · \(location.timeZoneID)").font(.caption).foregroundStyle(.secondary)
+                            Text("\(location.detail) · \(location.timeZoneDisplayName)").font(.caption).foregroundStyle(.secondary)
                         }
                         Spacer()
                         Button("Edit") { editor = LocationEditorState(location: location) }
-                            .buttonStyle(.borderless)
+                            .buttonStyle(.bordered)
                     }.padding(.vertical, 3).tag(location.id)
                 }
                 .onMove { store.locations.move(fromOffsets: $0, toOffset: $1) }

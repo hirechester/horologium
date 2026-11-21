@@ -31,7 +31,7 @@ struct PopoverView: View {
     private var timeTravel: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
-                Text(store.previewDate == nil ? "TIME TRAVEL" : "TIME TRAVEL · PREVIEW").font(.system(size: 10, weight: .semibold)).tracking(1).foregroundStyle(.secondary)
+                Text("TIME TRAVEL").font(.system(size: 10, weight: .semibold)).tracking(1).foregroundStyle(.secondary)
                 Spacer()
                 Button("Now") { store.returnToNow() }
                     .font(.caption.weight(.medium)).buttonStyle(.borderless)
@@ -86,7 +86,7 @@ private struct ClockRow: View {
             VStack(alignment: .leading, spacing: 3) {
                 Text(location.displayLabel).font(.system(size: 13, weight: .medium)).lineLimit(1)
                 if let zone = location.timeZone {
-                    Text("\(zone.abbreviation(for: date) ?? zone.identifier) · \(TimeEngine.offset(of: zone, from: .autoupdatingCurrent, at: date))")
+                    Text("\(zone.abbreviation(for: date) ?? location.timeZoneDisplayName) · \(TimeEngine.offset(of: zone, from: .autoupdatingCurrent, at: date))")
                         .font(.system(size: 10)).foregroundStyle(.secondary)
                 } else {
                     Text("Time zone unavailable — edit in Settings").font(.caption2).foregroundStyle(.orange)

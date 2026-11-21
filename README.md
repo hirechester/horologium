@@ -9,7 +9,7 @@ Click the date and time in the menu bar to browse a month, check your saved loca
 - Compact month calendar with system week-start conventions and keyboard navigation.
 - Offline search across 34,248 GeoNames cities, plus manual IANA time-zone selection.
 - Custom clock labels, optional native macOS emoji, editing, removal, and reordering.
-- Searchable native emoji picker with country flags first and category filters.
+- Searchable native emoji picker defaulting to Country flags, with All emoji and category filters.
 - A plain time-travel slider with 15/30/60-minute snapping (30 by default) and automatic daylight-saving handling.
 - Local dates and time differences for every location, including fractional-hour offsets.
 - System, 12-hour, and 24-hour formats; system or custom week start; optional start at login.

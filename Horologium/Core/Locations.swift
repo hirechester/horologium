@@ -8,6 +8,8 @@ struct SavedLocation: Codable, Identifiable, Equatable, Sendable {
     var emoji: String? = nil
     var sourceName: String? = nil
     var displayLabel: String { [emoji, label].compactMap { $0 }.filter { !$0.isEmpty }.joined(separator: " ") }
+    var timeZoneDisplayName: String { Self.displayTimeZone(timeZoneID) }
+    static func displayTimeZone(_ identifier: String) -> String { identifier.replacingOccurrences(of: "_", with: " ") }
     var timeZone: TimeZone? { TimeZone(identifier: timeZoneID) }
 }
 

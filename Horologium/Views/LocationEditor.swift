@@ -70,23 +70,30 @@ struct LocationEditor: View {
                 }
             }.frame(height: 230).clipShape(RoundedRectangle(cornerRadius: 8))
             if let chosen {
-                Text("Selected: \(chosen.label) · \(chosen.timeZoneID)")
+                Text("Selected: \(chosen.label) · \(chosen.timeZoneDisplayName)")
                     .font(.caption).foregroundStyle(.secondary).lineLimit(1)
             } else {
                 Text("Choose a result above.").font(.caption).foregroundStyle(.secondary)
             }
-            HStack(alignment: .bottom, spacing: 10) {
+            HStack(alignment: .top, spacing: 10) {
                 VStack(alignment: .leading, spacing: 4) {
                     Text("Emoji").font(.caption).foregroundStyle(.secondary)
                     Button { showingEmojiPicker = true } label: {
-                        Text(emoji ?? "＋").font(.system(size: 22)).frame(width: 40, height: 28)
-                    }.accessibilityLabel("Choose location emoji")
+                        Text(emoji ?? "＋").font(.system(size: 20)).frame(width: 48, height: 32)
+                    }
+                    .buttonStyle(.plain)
+                    .background(Color(nsColor: .controlBackgroundColor), in: RoundedRectangle(cornerRadius: 6))
+                    .overlay(RoundedRectangle(cornerRadius: 6).strokeBorder(.secondary.opacity(0.25)))
+                    .accessibilityLabel("Choose location emoji")
                     .popover(isPresented: $showingEmojiPicker) { EmojiPicker(selection: $emoji) }
                 }
                 VStack(alignment: .leading, spacing: 4) {
                     Text("Custom label (optional)").font(.caption).foregroundStyle(.secondary)
                     TextField(chosen?.sourceName ?? chosen?.label ?? "City name", text: $label)
-                        .textFieldStyle(.roundedBorder).accessibilityLabel("Custom location label")
+                        .textFieldStyle(.plain).padding(.horizontal, 8).frame(height: 32)
+                        .background(Color(nsColor: .controlBackgroundColor), in: RoundedRectangle(cornerRadius: 6))
+                        .overlay(RoundedRectangle(cornerRadius: 6).strokeBorder(.secondary.opacity(0.25)))
+                        .accessibilityLabel("Custom location label")
                 }
             }
             Text("Leave the label blank to use the city or time-zone name.")
@@ -129,7 +136,7 @@ struct LocationEditor: View {
             HStack {
                 VStack(alignment: .leading, spacing: 3) {
                     Text(name).fontWeight(.medium)
-                    Text([detail, zoneID].filter { !$0.isEmpty }.joined(separator: " · "))
+                    Text([detail, SavedLocation.displayTimeZone(zoneID)].filter { !$0.isEmpty }.joined(separator: " · "))
                         .font(.caption).foregroundStyle(.secondary)
                 }
                 Spacer()
