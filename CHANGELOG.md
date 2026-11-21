@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.6 — Build 7
+
+- Replaced the main anchored popover with a rounded, arrowless native panel below the menu bar item.
+- Preserved click-outside, Escape, focus-loss, and status-item dismissal, with screen-aware placement and dynamic resizing.
+
 ## 1.0.5 — Build 6
 
 - Added Calendar icon only at the top of Menu Bar settings, showing 🗓️ and clearing/disabling text options.

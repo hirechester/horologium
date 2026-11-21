@@ -70,7 +70,7 @@ Create a local installer for development:
 ./scripts/package.sh --local
 ```
 
-Output: `build/packages/Horologium-1.0.5-build6-local.pkg`. This contains an ad hoc signed app; the package is **not Developer ID signed or notarized** and is for local development.
+Output: `build/packages/Horologium-1.0.6-build7-local.pkg`. This contains an ad hoc signed app; the package is **not Developer ID signed or notarized** and is for local development.
 
 Once Ardens' Apple Developer Program membership is active:
 
@@ -91,7 +91,7 @@ Quit an existing Horologium process before installing an updated build, then reo
 
 ## Versioning
 
-The current version is **1.0.5 (build 6)**. `Version.json` is the source of truth; the Xcode project generator reads it, About reads the built app metadata, and installer filenames include both version and build.
+The current version is **1.0.6 (build 7)**. `Version.json` is the source of truth; the Xcode project generator reads it, About reads the built app metadata, and installer filenames include both version and build.
 
 Bump the patch version and build once per delivered change:
 
@@ -103,7 +103,7 @@ Use `minor` or `major` for larger releases. The script increments the build numb
 
 ## Project structure and tests
 
-SwiftUI views are hosted by an AppKit status item and transient popover. `TimeEngine` owns calendar and time-zone calculations; `CityCatalog` handles offline search; `AppStore` persists locations and preferences in UserDefaults. Preview time is temporary. Malformed settings are preserved under a recovery key before fresh defaults are used.
+SwiftUI views are hosted by an AppKit status item and rounded, arrowless floating panel. `TimeEngine` owns calendar and time-zone calculations; `CityCatalog` handles offline search; `AppStore` persists locations and preferences in UserDefaults. Preview time is temporary. Malformed settings are preserved under a recovery key before fresh defaults are used.
 
 The shared Xcode scheme runs unit tests for DST gaps/overlaps, date boundaries, leap days, fractional offsets, search, persistence, and an injectable clock. Visual tests render the actual SwiftUI views with sample locations into XCTest attachments and `/tmp/horologium-previews`. These previews are not desktop interaction tests. Live popover placement, full-screen Spaces, login-item approval, and signed installation should also be checked on a Mac before public distribution.
 

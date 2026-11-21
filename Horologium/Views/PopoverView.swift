@@ -21,6 +21,8 @@ struct PopoverView: View {
         .padding(.bottom, 12)
         .frame(width: 352)
         .background(.regularMaterial)
+        .clipShape(RoundedRectangle(cornerRadius: 16))
+        .overlay(RoundedRectangle(cornerRadius: 16).strokeBorder(.primary.opacity(0.12)))
         .focusable().focusEffectDisabled().focused($focused)
         .onAppear { focused = true }
         .onKeyPress(.leftArrow) { store.moveSelection(days: -1); return .handled }

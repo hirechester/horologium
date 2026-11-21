@@ -18,7 +18,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private let store = AppStore()
     private let settingsNavigation = SettingsNavigation()
     private var statusItem: NSStatusItem!
-    private let popover = NSPopover()
+    private var dropdown: MenuBarPanel!
     private var settingsWindow: NSWindow?
     private var timer: Timer?
     private var subscriptions = Set<AnyCancellable>()
@@ -31,10 +31,14 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         _ = statusItem.button?.sendAction(on: [.leftMouseUp, .rightMouseUp])
         statusItem.button?.setAccessibilityLabel("Horologium calendar and world clocks")
         statusItem.button?.font = .monospacedDigitSystemFont(ofSize: NSFont.systemFontSize, weight: .regular)
-        popover.behavior = .transient
         let controller = NSHostingController(rootView: PopoverView(store: store) { [weak self] in self?.showLocationSettings() })
         controller.sizingOptions = [.preferredContentSize]
-        popover.contentViewController = controller
+        dropdown = MenuBarPanel(controller: controller) { [weak self] in
+            guard let button = self?.statusItem.button, let window = button.window,
+                  let screen = window.screen else { return nil }
+            let item = window.convertToScreen(button.convert(button.bounds, to: nil))
+            return (item: item, screen: screen.visibleFrame)
+        }
         store.$now.combineLatest(store.$preferences).sink { [weak self] _, _ in
             // @Published sends before assignment; render on the next main run-loop turn.
             DispatchQueue.main.async {
@@ -69,14 +73,14 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     @objc private func statusItemClicked() {
         let event = NSApplication.shared.currentEvent
         if event?.type == .rightMouseUp || event?.modifierFlags.contains(.control) == true {
-            popover.performClose(nil)
+            dropdown.dismiss()
             guard let button = statusItem.button else { return }
             let menu = NSMenu()
             menu.addItem(withTitle: "Settings…", action: #selector(showSettings), keyEquivalent: ",").target = self
             menu.addItem(.separator())
             menu.addItem(withTitle: "Quit Horologium", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q")
             menu.popUp(positioning: nil, at: NSPoint(x: 0, y: button.bounds.minY), in: button)
-        } else { togglePopover() }
+        } else { toggleDropdown() }
     }
 
     private func updateAppearance() {
@@ -95,6 +99,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         let title = store.menuTitle
         if statusItem.button?.title != title { statusItem.button?.title = title }
         statusItem.button?.image = title.isEmpty ? NSImage(systemSymbolName: "clock", accessibilityDescription: "Horologium") : nil
+        dropdown?.updateFrame()
     }
 
     @objc private func environmentChanged() {
@@ -104,17 +109,15 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         store.refresh()
         store.objectWillChange.send()
         updateTitle()
+        dropdown.updateFrame()
     }
 
-    @objc private func togglePopover() {
-        guard let button = statusItem.button else { return }
-        if popover.isShown { popover.performClose(nil) }
+    @objc private func toggleDropdown() {
+        if dropdown.isPresented { dropdown.dismiss() }
         else {
             store.returnToNow()
             NSApplication.shared.activate(ignoringOtherApps: true)
-            if let view = popover.contentViewController?.view { popover.contentSize = view.fittingSize }
-            popover.show(relativeTo: button.bounds, of: button, preferredEdge: .minY)
-            popover.contentViewController?.view.window?.makeKey()
+            dropdown.show()
         }
     }
 
@@ -124,7 +127,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     @objc private func showSettings() {
-        popover.performClose(nil)
+        dropdown.dismiss()
         if settingsWindow == nil {
             let window = NSWindow(contentRect: NSRect(x: 0, y: 0, width: 540, height: 600),
                                   styleMask: [.titled, .closable, .miniaturizable], backing: .buffered, defer: false)
