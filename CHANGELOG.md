@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.3 — Build 4
+
+- Removed the Menu Bar formatting group's heading.
+- Added a link below the format toggles to the native macOS clock settings.
+
 ## 1.0.2 — Build 3
 
 - Stabilized settings tabs with fixed, equal native segment widths.

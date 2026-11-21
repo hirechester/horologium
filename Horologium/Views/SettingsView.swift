@@ -117,7 +117,7 @@ struct SettingsView: View {
 
     private var menuBar: some View {
         Form {
-            Section("Show") {
+            Section {
                 Toggle("Week number", isOn: $store.preferences.showWeekNumber)
                 Toggle("Day of week", isOn: $store.preferences.showDayOfWeek)
                 Toggle("Date", isOn: $store.preferences.showDate)
@@ -126,6 +126,11 @@ struct SettingsView: View {
                 Toggle("Seconds", isOn: $store.preferences.showSeconds).disabled(!store.preferences.showTime)
                 Toggle("AM/PM symbols", isOn: $store.preferences.showAMPM)
                     .disabled(!store.preferences.showTime || store.preferences.clockFormat == .twentyFourHour)
+            }
+            Section {
+                Link(destination: URL(string: "x-apple.systempreferences:com.apple.ControlCenter-Settings.extension?Clock")!) {
+                    Label("Open macOS Clock Settings…", systemImage: "arrow.up.forward.square")
+                }
             }
         }.formStyle(.grouped).scrollContentBackground(.hidden).toggleStyle(.switch)
     }

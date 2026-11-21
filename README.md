@@ -14,6 +14,7 @@ Click the date and time in the menu bar to browse a month, check your saved loca
 - Local dates and time differences for every location, including fractional-hour offsets.
 - System, 12-hour, and 24-hour formats; system or custom week start; optional start at login.
 - Independent menu bar toggles for week number, weekday, date, month, time, seconds, and AM/PM.
+- A shortcut to macOS clock settings below the format toggles. macOS keeps its native clock visible; Horologium does not modify system clock preferences.
 - Reorder Calendar, Time Travel, and Time Zones in Settings → Layout.
 - System-following appearance by default, with Light/Dark overrides and VoiceOver labels.
 - Local preferences only. No accounts, calendar permissions, event notifications, analytics, or runtime network requests.
@@ -68,7 +69,7 @@ Create a local installer for development:
 ./scripts/package.sh --local
 ```
 
-Output: `build/packages/Horologium-1.0.2-build3-local.pkg`. This contains an ad hoc signed app; the package is **not Developer ID signed or notarized** and is for local development.
+Output: `build/packages/Horologium-1.0.3-build4-local.pkg`. This contains an ad hoc signed app; the package is **not Developer ID signed or notarized** and is for local development.
 
 Once Ardens' Apple Developer Program membership is active:
 
@@ -89,7 +90,7 @@ Quit an existing Horologium process before installing an updated build, then reo
 
 ## Versioning
 
-The current version is **1.0.2 (build 3)**. `Version.json` is the source of truth; the Xcode project generator reads it, About reads the built app metadata, and installer filenames include both version and build.
+The current version is **1.0.3 (build 4)**. `Version.json` is the source of truth; the Xcode project generator reads it, About reads the built app metadata, and installer filenames include both version and build.
 
 Bump the patch version and build once per delivered change:
 
