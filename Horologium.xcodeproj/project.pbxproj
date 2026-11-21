@@ -1,0 +1,432 @@
+// !$*UTF8*$!
+{
+	"archiveVersion" = 1;
+	"classes" = {
+	};
+	"objectVersion" = 56;
+	"objects" = {
+		"D0A9D9CD4582765CB0FAD6D4" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Horologium/AppDelegate.swift";
+			"sourceTree" = "<group>";
+		};
+		"F99C2FD2C80121EDA6D47A59" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "D0A9D9CD4582765CB0FAD6D4";
+		};
+		"83322A592E5BC4D2F1FE0385" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Horologium/Core/AppStore.swift";
+			"sourceTree" = "<group>";
+		};
+		"D9E01A3E881F4C10C38B22C0" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "83322A592E5BC4D2F1FE0385";
+		};
+		"F1DDFE0095C04B4FC8CDB88D" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Horologium/Core/EmojiCatalog.swift";
+			"sourceTree" = "<group>";
+		};
+		"798217657DF093D8C9DF28A1" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "F1DDFE0095C04B4FC8CDB88D";
+		};
+		"2AA89F522BE00F59056AEDD5" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Horologium/Core/Locations.swift";
+			"sourceTree" = "<group>";
+		};
+		"D6C2C891543EC3F432552054" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "2AA89F522BE00F59056AEDD5";
+		};
+		"2B1F7777FFE2762DD3FCDE6B" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Horologium/Core/TimeEngine.swift";
+			"sourceTree" = "<group>";
+		};
+		"9E610649BFABDDF72A25746A" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "2B1F7777FFE2762DD3FCDE6B";
+		};
+		"18DD2D5F1248033D3E792C49" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Horologium/Views/CalendarView.swift";
+			"sourceTree" = "<group>";
+		};
+		"1B210115D9ECF13BF0231A15" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "18DD2D5F1248033D3E792C49";
+		};
+		"3C07A04301E8A9963E38DAE2" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Horologium/Views/EmojiPicker.swift";
+			"sourceTree" = "<group>";
+		};
+		"C5455DA39309E30BD8AFEEBA" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "3C07A04301E8A9963E38DAE2";
+		};
+		"D4C836904BB695DCF360340E" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Horologium/Views/LocationEditor.swift";
+			"sourceTree" = "<group>";
+		};
+		"EC38F15CF48A9F2B6E9993F0" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "D4C836904BB695DCF360340E";
+		};
+		"31CF3CB7B3F3A74CC4BD133B" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Horologium/Views/PopoverView.swift";
+			"sourceTree" = "<group>";
+		};
+		"B5F33260C03871CBC10BC7D6" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "31CF3CB7B3F3A74CC4BD133B";
+		};
+		"6285ADE1F66E4D4BE9A27DDF" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Horologium/Views/SettingsView.swift";
+			"sourceTree" = "<group>";
+		};
+		"8EA2636562B71B958838672B" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "6285ADE1F66E4D4BE9A27DDF";
+		};
+		"DD3888A9BD3BF67527B332AA" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "HorologiumTests/EmojiAndAppearanceTests.swift";
+			"sourceTree" = "<group>";
+		};
+		"C91AEF1AA816931D2B5A8F21" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "DD3888A9BD3BF67527B332AA";
+		};
+		"72B656066DB2569AEAE619DC" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "HorologiumTests/StoreAndSearchTests.swift";
+			"sourceTree" = "<group>";
+		};
+		"5B5C5A4074168333F0ACC225" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "72B656066DB2569AEAE619DC";
+		};
+		"B502E094BACF4ED193615319" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "HorologiumTests/TimeEngineTests.swift";
+			"sourceTree" = "<group>";
+		};
+		"7BBFFAB609162C16E5D88BD8" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "B502E094BACF4ED193615319";
+		};
+		"E7E474ADBF096BE32DB05825" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "HorologiumTests/VisualPreviewTests.swift";
+			"sourceTree" = "<group>";
+		};
+		"1D17A71802CC6F9AD6716F16" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "E7E474ADBF096BE32DB05825";
+		};
+		"7DF9AEC788F5C1775EF4877A" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "file";
+			"path" = "Horologium/Resources/AppIcon.icns";
+			"sourceTree" = "<group>";
+		};
+		"485DF82A35F14EDC41E4B524" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "7DF9AEC788F5C1775EF4877A";
+		};
+		"557711FFC09BEA8EB8435E67" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "file";
+			"path" = "Horologium/Resources/Cities.json";
+			"sourceTree" = "<group>";
+		};
+		"6257F64CFAAD4139BD0BD2AE" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "557711FFC09BEA8EB8435E67";
+		};
+		"8CA5E48A53B029196A9521AB" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "file";
+			"path" = "Horologium/Resources/Emoji.json";
+			"sourceTree" = "<group>";
+		};
+		"7C498C440A76651FBA456ED5" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "8CA5E48A53B029196A9521AB";
+		};
+		"B16B866A93196DF82E62D3C3" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "file";
+			"path" = "Horologium/Resources/GeoNames-attribution.txt";
+			"sourceTree" = "<group>";
+		};
+		"C8D6ECB9417AB9422F95A506" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "B16B866A93196DF82E62D3C3";
+		};
+		"D64FEE5E5860BF4EDF0ABFB8" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "file";
+			"path" = "Horologium/Resources/Logo.png";
+			"sourceTree" = "<group>";
+		};
+		"80E7458E0FF9522FBB13C536" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "D64FEE5E5860BF4EDF0ABFB8";
+		};
+		"4411ACA25EA834672217274E" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "file";
+			"path" = "Horologium/Resources/Unicode-LICENSE.txt";
+			"sourceTree" = "<group>";
+		};
+		"9B5B8BBC323BD6878D55B86C" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "4411ACA25EA834672217274E";
+		};
+		"4E783A9E10D2A8ABA38CD11C" = {
+			"isa" = "PBXFileReference";
+			"explicitFileType" = "wrapper.application";
+			"path" = "Horologium.app";
+			"sourceTree" = "BUILT_PRODUCTS_DIR";
+		};
+		"6C7CCDEB3609F1FAA874E941" = {
+			"isa" = "PBXFileReference";
+			"explicitFileType" = "wrapper.cfbundle";
+			"path" = "HorologiumTests.xctest";
+			"sourceTree" = "BUILT_PRODUCTS_DIR";
+		};
+		"FBDC4F23F93125BBEEAE800C" = {
+			"isa" = "PBXGroup";
+			"children" = ("4E783A9E10D2A8ABA38CD11C", "6C7CCDEB3609F1FAA874E941");
+			"name" = "Products";
+			"sourceTree" = "<group>";
+		};
+		"870B3294C0CBD48AF6BBCC1B" = {
+			"isa" = "PBXGroup";
+			"children" = ("D0A9D9CD4582765CB0FAD6D4", "83322A592E5BC4D2F1FE0385", "F1DDFE0095C04B4FC8CDB88D", "2AA89F522BE00F59056AEDD5", "2B1F7777FFE2762DD3FCDE6B", "18DD2D5F1248033D3E792C49", "3C07A04301E8A9963E38DAE2", "D4C836904BB695DCF360340E", "31CF3CB7B3F3A74CC4BD133B", "6285ADE1F66E4D4BE9A27DDF", "DD3888A9BD3BF67527B332AA", "72B656066DB2569AEAE619DC", "B502E094BACF4ED193615319", "E7E474ADBF096BE32DB05825", "7DF9AEC788F5C1775EF4877A", "557711FFC09BEA8EB8435E67", "8CA5E48A53B029196A9521AB", "B16B866A93196DF82E62D3C3", "D64FEE5E5860BF4EDF0ABFB8", "4411ACA25EA834672217274E", "FBDC4F23F93125BBEEAE800C");
+			"sourceTree" = "<group>";
+		};
+		"949D493B91791558E87BC5D7" = {
+			"isa" = "PBXSourcesBuildPhase";
+			"buildActionMask" = 2147483647;
+			"files" = ("F99C2FD2C80121EDA6D47A59", "D9E01A3E881F4C10C38B22C0", "798217657DF093D8C9DF28A1", "D6C2C891543EC3F432552054", "9E610649BFABDDF72A25746A", "1B210115D9ECF13BF0231A15", "C5455DA39309E30BD8AFEEBA", "EC38F15CF48A9F2B6E9993F0", "B5F33260C03871CBC10BC7D6", "8EA2636562B71B958838672B");
+			"runOnlyForDeploymentPostprocessing" = 0;
+		};
+		"BD92572B49AC16A86614498D" = {
+			"isa" = "PBXFrameworksBuildPhase";
+			"buildActionMask" = 2147483647;
+			"files" = ();
+			"runOnlyForDeploymentPostprocessing" = 0;
+		};
+		"8ECC8B5D05B79F879ACDF1A2" = {
+			"isa" = "PBXResourcesBuildPhase";
+			"buildActionMask" = 2147483647;
+			"files" = ("485DF82A35F14EDC41E4B524", "6257F64CFAAD4139BD0BD2AE", "7C498C440A76651FBA456ED5", "C8D6ECB9417AB9422F95A506", "80E7458E0FF9522FBB13C536", "9B5B8BBC323BD6878D55B86C");
+			"runOnlyForDeploymentPostprocessing" = 0;
+		};
+		"77A03FEE20FE96AD9384861E" = {
+			"isa" = "PBXSourcesBuildPhase";
+			"buildActionMask" = 2147483647;
+			"files" = ("C91AEF1AA816931D2B5A8F21", "5B5C5A4074168333F0ACC225", "7BBFFAB609162C16E5D88BD8", "1D17A71802CC6F9AD6716F16");
+			"runOnlyForDeploymentPostprocessing" = 0;
+		};
+		"E05DB79C430AA1B0BA487AFC" = {
+			"isa" = "PBXFrameworksBuildPhase";
+			"buildActionMask" = 2147483647;
+			"files" = ();
+			"runOnlyForDeploymentPostprocessing" = 0;
+		};
+		"D5C76E148680C094C001AC35" = {
+			"isa" = "PBXResourcesBuildPhase";
+			"buildActionMask" = 2147483647;
+			"files" = ();
+			"runOnlyForDeploymentPostprocessing" = 0;
+		};
+		"89E1FD6268CC0F221A2BE178" = {
+			"isa" = "XCBuildConfiguration";
+			"buildSettings" = {
+				"SDKROOT" = "macosx";
+				"MACOSX_DEPLOYMENT_TARGET" = "26.0";
+				"ARCHS" = "arm64";
+				"SWIFT_VERSION" = "6.0";
+				"CLANG_ENABLE_MODULES" = "YES";
+				"ENABLE_TESTABILITY" = "YES";
+				"CODE_SIGN_STYLE" = "Automatic";
+				"SWIFT_OPTIMIZATION_LEVEL" = "-Onone";
+				"DEBUG_INFORMATION_FORMAT" = "dwarf";
+				"SWIFT_ACTIVE_COMPILATION_CONDITIONS" = "DEBUG";
+			};
+			"name" = "Debug";
+		};
+		"E6DE6C99132752C914FEF632" = {
+			"isa" = "XCBuildConfiguration";
+			"buildSettings" = {
+				"SDKROOT" = "macosx";
+				"MACOSX_DEPLOYMENT_TARGET" = "26.0";
+				"ARCHS" = "arm64";
+				"SWIFT_VERSION" = "6.0";
+				"CLANG_ENABLE_MODULES" = "YES";
+				"ENABLE_TESTABILITY" = "NO";
+				"CODE_SIGN_STYLE" = "Automatic";
+				"SWIFT_OPTIMIZATION_LEVEL" = "-O";
+				"DEBUG_INFORMATION_FORMAT" = "dwarf-with-dsym";
+			};
+			"name" = "Release";
+		};
+		"862894B703A6DEDF96A9DD6C" = {
+			"isa" = "XCConfigurationList";
+			"buildConfigurations" = ("89E1FD6268CC0F221A2BE178", "E6DE6C99132752C914FEF632");
+			"defaultConfigurationIsVisible" = 0;
+			"defaultConfigurationName" = "Release";
+		};
+		"E9B2E96ABC5F6856F2BE79CF" = {
+			"isa" = "XCBuildConfiguration";
+			"buildSettings" = {
+				"PRODUCT_NAME" = "Horologium";
+				"PRODUCT_BUNDLE_IDENTIFIER" = "app.ardens.horologium";
+				"INFOPLIST_FILE" = "Horologium/Info.plist";
+				"MARKETING_VERSION" = "1.0";
+				"CURRENT_PROJECT_VERSION" = "1";
+				"ENABLE_HARDENED_RUNTIME" = "YES";
+				"LD_RUNPATH_SEARCH_PATHS" = "$(inherited) @executable_path/../Frameworks";
+				"SWIFT_OPTIMIZATION_LEVEL" = "-Onone";
+				"DEBUG_INFORMATION_FORMAT" = "dwarf";
+				"ENABLE_TESTABILITY" = "YES";
+				"SWIFT_ACTIVE_COMPILATION_CONDITIONS" = "DEBUG";
+			};
+			"name" = "Debug";
+		};
+		"5A8C91857F674E16E2724F47" = {
+			"isa" = "XCBuildConfiguration";
+			"buildSettings" = {
+				"PRODUCT_NAME" = "Horologium";
+				"PRODUCT_BUNDLE_IDENTIFIER" = "app.ardens.horologium";
+				"INFOPLIST_FILE" = "Horologium/Info.plist";
+				"MARKETING_VERSION" = "1.0";
+				"CURRENT_PROJECT_VERSION" = "1";
+				"ENABLE_HARDENED_RUNTIME" = "YES";
+				"LD_RUNPATH_SEARCH_PATHS" = "$(inherited) @executable_path/../Frameworks";
+				"SWIFT_OPTIMIZATION_LEVEL" = "-O";
+				"DEBUG_INFORMATION_FORMAT" = "dwarf-with-dsym";
+				"ENABLE_TESTABILITY" = "NO";
+			};
+			"name" = "Release";
+		};
+		"F37922C48DA5978D02C9E50E" = {
+			"isa" = "XCConfigurationList";
+			"buildConfigurations" = ("E9B2E96ABC5F6856F2BE79CF", "5A8C91857F674E16E2724F47");
+			"defaultConfigurationIsVisible" = 0;
+			"defaultConfigurationName" = "Release";
+		};
+		"FCB48D8F88BCDB0ED9FADFD7" = {
+			"isa" = "XCBuildConfiguration";
+			"buildSettings" = {
+				"PRODUCT_NAME" = "HorologiumTests";
+				"PRODUCT_BUNDLE_IDENTIFIER" = "app.ardens.horologium.tests";
+				"GENERATE_INFOPLIST_FILE" = "YES";
+				"TEST_HOST" = "$(BUILT_PRODUCTS_DIR)/Horologium.app/Contents/MacOS/Horologium";
+				"BUNDLE_LOADER" = "$(TEST_HOST)";
+				"LD_RUNPATH_SEARCH_PATHS" = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				"SWIFT_OPTIMIZATION_LEVEL" = "-Onone";
+				"DEBUG_INFORMATION_FORMAT" = "dwarf";
+				"ENABLE_TESTABILITY" = "YES";
+				"SWIFT_ACTIVE_COMPILATION_CONDITIONS" = "DEBUG";
+			};
+			"name" = "Debug";
+		};
+		"942EEBBACD6C88CAE7F29B29" = {
+			"isa" = "XCBuildConfiguration";
+			"buildSettings" = {
+				"PRODUCT_NAME" = "HorologiumTests";
+				"PRODUCT_BUNDLE_IDENTIFIER" = "app.ardens.horologium.tests";
+				"GENERATE_INFOPLIST_FILE" = "YES";
+				"TEST_HOST" = "$(BUILT_PRODUCTS_DIR)/Horologium.app/Contents/MacOS/Horologium";
+				"BUNDLE_LOADER" = "$(TEST_HOST)";
+				"LD_RUNPATH_SEARCH_PATHS" = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				"SWIFT_OPTIMIZATION_LEVEL" = "-O";
+				"DEBUG_INFORMATION_FORMAT" = "dwarf-with-dsym";
+				"ENABLE_TESTABILITY" = "NO";
+			};
+			"name" = "Release";
+		};
+		"BECB265224D91761C05FDA33" = {
+			"isa" = "XCConfigurationList";
+			"buildConfigurations" = ("FCB48D8F88BCDB0ED9FADFD7", "942EEBBACD6C88CAE7F29B29");
+			"defaultConfigurationIsVisible" = 0;
+			"defaultConfigurationName" = "Release";
+		};
+		"F75109BEB4DD8800DA6B45F8" = {
+			"isa" = "PBXNativeTarget";
+			"buildConfigurationList" = "F37922C48DA5978D02C9E50E";
+			"buildPhases" = ("949D493B91791558E87BC5D7", "BD92572B49AC16A86614498D", "8ECC8B5D05B79F879ACDF1A2");
+			"buildRules" = ();
+			"dependencies" = ();
+			"name" = "Horologium";
+			"productName" = "Horologium";
+			"productReference" = "4E783A9E10D2A8ABA38CD11C";
+			"productType" = "com.apple.product-type.application";
+		};
+		"D799BAE6088A90139B415FCC" = {
+			"isa" = "PBXContainerItemProxy";
+			"containerPortal" = "98F54143AB4E86B28C3AFEE0";
+			"proxyType" = 1;
+			"remoteGlobalIDString" = "F75109BEB4DD8800DA6B45F8";
+			"remoteInfo" = "Horologium";
+		};
+		"DE58E2B17C19600779694943" = {
+			"isa" = "PBXTargetDependency";
+			"target" = "F75109BEB4DD8800DA6B45F8";
+			"targetProxy" = "D799BAE6088A90139B415FCC";
+		};
+		"C062A5A4A7F4F37DD90F54CB" = {
+			"isa" = "PBXNativeTarget";
+			"buildConfigurationList" = "BECB265224D91761C05FDA33";
+			"buildPhases" = ("77A03FEE20FE96AD9384861E", "E05DB79C430AA1B0BA487AFC", "D5C76E148680C094C001AC35");
+			"buildRules" = ();
+			"dependencies" = ("DE58E2B17C19600779694943");
+			"name" = "HorologiumTests";
+			"productName" = "HorologiumTests";
+			"productReference" = "6C7CCDEB3609F1FAA874E941";
+			"productType" = "com.apple.product-type.bundle.unit-test";
+		};
+		"98F54143AB4E86B28C3AFEE0" = {
+			"isa" = "PBXProject";
+			"attributes" = {
+				"LastUpgradeCheck" = "2700";
+			};
+			"buildConfigurationList" = "862894B703A6DEDF96A9DD6C";
+			"compatibilityVersion" = "Xcode 14.0";
+			"developmentRegion" = "en";
+			"hasScannedForEncodings" = 0;
+			"knownRegions" = ("en", "Base");
+			"mainGroup" = "870B3294C0CBD48AF6BBCC1B";
+			"productRefGroup" = "FBDC4F23F93125BBEEAE800C";
+			"projectDirPath" = "";
+			"projectRoot" = "";
+			"targets" = ("F75109BEB4DD8800DA6B45F8", "C062A5A4A7F4F37DD90F54CB");
+		};
+	};
+	"rootObject" = "98F54143AB4E86B28C3AFEE0";
+}
