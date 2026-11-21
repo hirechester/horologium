@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.0.2 — Build 3
+
+- Stabilized settings tabs with fixed, equal native segment widths.
+- Removed Ardens from About and removed the Menu Bar preview section.
+- Removed excess space below short clock lists and tightened the dropdown's bottom padding.
+- Added a little spacing between the calendar header and weekday grid.
+
 ## 1.0.1 — Build 2
 
 - Simplified the location editor and emoji picker by removing helper text and the emoji count footer.

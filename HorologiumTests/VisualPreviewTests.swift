@@ -41,6 +41,39 @@ final class VisualPreviewTests: XCTestCase {
         try render(PopoverView(store: store, openLocations: {}), name: "04-first-launch", width: 352)
     }
 
+    @MainActor func testSettingsTabWidthsRemainStableAcrossSelections() async throws {
+        let suite = "HorologiumLayoutTests.\(UUID())"
+        let defaults = UserDefaults(suiteName: suite)!
+        defer { defaults.removePersistentDomain(forName: suite) }
+        let navigation = SettingsNavigation()
+        let view = NSHostingView(rootView: SettingsView(store: AppStore(defaults: defaults), navigation: navigation))
+        let window = NSWindow(contentRect: NSRect(x: 0, y: 0, width: 540, height: 600),
+                              styleMask: [.borderless], backing: .buffered, defer: false)
+        window.isReleasedWhenClosed = false
+        window.contentView = view
+        defer { window.close() }
+        func segmentedControl(in view: NSView) -> NSSegmentedControl? {
+            if let control = view as? NSSegmentedControl, control.segmentCount == 6 { return control }
+            return view.subviews.compactMap { segmentedControl(in: $0) }.first
+        }
+        var firstFrame: NSRect?
+        for tab in SettingsView.Tab.allCases {
+            navigation.tab = tab
+            try await Task.sleep(for: .milliseconds(25))
+            view.layoutSubtreeIfNeeded()
+            let control = try XCTUnwrap(segmentedControl(in: view))
+            if let firstFrame {
+                XCTAssertEqual(control.frame.width, firstFrame.width, accuracy: 0.5)
+                XCTAssertEqual(control.frame.origin.x, firstFrame.origin.x, accuracy: 0.5)
+            } else { firstFrame = control.frame }
+            for index in 0..<control.segmentCount {
+                XCTAssertEqual(control.width(forSegment: index), 82, accuracy: 0.5)
+            }
+            XCTAssertEqual(control.selectedSegment, SettingsView.Tab.allCases.firstIndex(of: tab))
+            XCTAssertEqual(window.contentView!.frame.width, 540, accuracy: 0.5)
+        }
+    }
+
     @MainActor private func render<V: View>(_ content: V, name: String, width: CGFloat, dark: Bool = false) throws {
         let view = NSHostingView(rootView: content.environment(\.colorScheme, dark ? .dark : .light))
         let window = NSWindow(contentRect: NSRect(x: 0, y: 0, width: width, height: 800),

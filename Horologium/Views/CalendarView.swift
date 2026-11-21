@@ -5,7 +5,7 @@ struct CalendarView: View {
     private let columns = Array(repeating: GridItem(.flexible(), spacing: 2), count: 7)
 
     var body: some View {
-        VStack(spacing: 10) {
+        VStack(spacing: 14) {
             HStack {
                 Text(ClockText.date(store.month, template: "MMMM yyyy"))
                     .font(.headline)

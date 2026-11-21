@@ -14,7 +14,10 @@ struct SettingsView: View {
     @State private var loginEnabled = SMAppService.mainApp.status == .enabled
     @State private var loginError: String?
 
-    enum Tab: String, CaseIterable { case general, menuBar, calendar, layout, locations, about }
+    enum Tab: String, CaseIterable {
+        case general, menuBar, calendar, layout, locations, about
+        var title: String { self == .menuBar ? "Menu Bar" : rawValue.capitalized }
+    }
     @ObservedObject private var navigation: SettingsNavigation
     @State private var selectedSection: DropdownSection?
 
@@ -25,14 +28,7 @@ struct SettingsView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
-            Picker("Settings category", selection: $navigation.tab) {
-                Text("General").tag(Tab.general)
-                Text("Menu Bar").tag(Tab.menuBar)
-                Text("Calendar").tag(Tab.calendar)
-                Text("Layout").tag(Tab.layout)
-                Text("Locations").tag(Tab.locations)
-                Text("About").tag(Tab.about)
-            }.pickerStyle(.segmented).labelsHidden()
+            SettingsTabs(selection: $navigation.tab).frame(width: 492, height: 28)
             Group {
                 switch navigation.tab {
                 case .general: general
@@ -131,10 +127,6 @@ struct SettingsView: View {
                 Toggle("AM/PM symbols", isOn: $store.preferences.showAMPM)
                     .disabled(!store.preferences.showTime || store.preferences.clockFormat == .twentyFourHour)
             }
-            Section {
-                Text(store.menuTitle.isEmpty ? "Clock icon" : store.menuTitle)
-                    .font(.system(.body, design: .monospaced)).accessibilityLabel("Menu bar preview")
-            } header: { Text("Preview") }
         }.formStyle(.grouped).scrollContentBackground(.hidden).toggleStyle(.switch)
     }
 
@@ -182,7 +174,6 @@ struct SettingsView: View {
             Text("Horologium").font(.largeTitle.weight(.semibold))
             Text("Version \(Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "—") (build \(Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String ?? "—"))")
                 .font(.subheadline).foregroundStyle(.secondary)
-            Text("Ardens").foregroundStyle(.secondary)
             Link("City data by GeoNames", destination: URL(string: "https://www.geonames.org/")!)
             Link("Creative Commons Attribution 4.0", destination: URL(string: "https://creativecommons.org/licenses/by/4.0/")!)
                 .font(.caption).foregroundStyle(.secondary)
@@ -220,4 +211,46 @@ struct SettingsView: View {
 private struct LocationEditorState: Identifiable {
     let id = UUID()
     let location: SavedLocation?
+}
+
+// Fixed segment widths prevent native selection emphasis from shifting adjacent tabs.
+struct SettingsTabs: NSViewRepresentable {
+    @Binding var selection: SettingsView.Tab
+
+    func makeNSView(context: Context) -> NSSegmentedControl {
+        let control = NSSegmentedControl()
+        control.segmentCount = SettingsView.Tab.allCases.count
+        control.trackingMode = .selectOne
+        control.segmentStyle = .rounded
+        control.segmentDistribution = .fillEqually
+        control.font = .systemFont(ofSize: 13)
+        for (index, tab) in SettingsView.Tab.allCases.enumerated() {
+            control.setLabel(tab.title, forSegment: index)
+            control.setWidth(82, forSegment: index)
+        }
+        control.target = context.coordinator
+        control.action = #selector(Coordinator.changed(_:))
+        control.setAccessibilityLabel("Settings category")
+        return control
+    }
+
+    func updateNSView(_ control: NSSegmentedControl, context: Context) {
+        context.coordinator.selection = $selection
+        control.selectedSegment = SettingsView.Tab.allCases.firstIndex(of: selection)!
+    }
+
+    func sizeThatFits(_ proposal: ProposedViewSize, nsView: NSSegmentedControl, context: Context) -> CGSize? {
+        CGSize(width: 492, height: 28)
+    }
+
+    func makeCoordinator() -> Coordinator { Coordinator(selection: $selection) }
+
+    final class Coordinator: NSObject {
+        var selection: Binding<SettingsView.Tab>
+        init(selection: Binding<SettingsView.Tab>) { self.selection = selection }
+        @objc func changed(_ control: NSSegmentedControl) {
+            guard SettingsView.Tab.allCases.indices.contains(control.selectedSegment) else { return }
+            selection.wrappedValue = SettingsView.Tab.allCases[control.selectedSegment]
+        }
+    }
 }

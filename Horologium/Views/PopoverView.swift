@@ -16,7 +16,9 @@ struct PopoverView: View {
                 }
             }
         }
-        .padding(18)
+        .padding(.horizontal, 18)
+        .padding(.top, 18)
+        .padding(.bottom, 12)
         .frame(width: 352)
         .background(.regularMaterial)
         .focusable().focusEffectDisabled().focused($focused)
@@ -63,17 +65,22 @@ struct PopoverView: View {
                         .font(.caption).foregroundStyle(.secondary).multilineTextAlignment(.center)
                     Button("Add Location", action: openLocations).padding(.top, 3)
                 }.frame(maxWidth: .infinity).padding(.vertical, 10)
+            } else if store.locations.count <= 4 {
+                clockRows
             } else {
-                ScrollView {
-                    VStack(spacing: 12) {
-                        ForEach(store.locations) { location in
-                            ClockRow(location: location, date: store.displayedDate, format: store.preferences.clockFormat)
-                        }
-                    }.padding(.trailing, 3)
-                }.frame(height: min(CGFloat(store.locations.count) * 51, 220))
+                ScrollView { clockRows }.frame(height: 220)
             }
         }
     }
+
+    private var clockRows: some View {
+        VStack(spacing: 12) {
+            ForEach(store.locations) { location in
+                ClockRow(location: location, date: store.displayedDate, format: store.preferences.clockFormat)
+            }
+        }.padding(.trailing, 3)
+    }
+
 }
 
 private struct ClockRow: View {
