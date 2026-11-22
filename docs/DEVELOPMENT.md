@@ -28,6 +28,8 @@ Create a local installer for development:
 
 Output: `build/packages/Horologium-<version>-build<build>-local.pkg`. This contains an ad hoc signed app; the package is **not Developer ID signed or notarized** and is for local development.
 
+Both package modes use a native product installer with a branded welcome page and completion instructions. `scripts/prepare-installer.py` generates the resources and customizes the synthesized distribution. Installation requires Apple silicon and macOS 26 or later, and always targets `/Applications/Horologium.app`. The release workflow signs the final product archive.
+
 Once Ardens' Apple Developer Program membership is active:
 
 1. Create **Developer ID Application** and **Developer ID Installer** certificates in the account and import them into Keychain.

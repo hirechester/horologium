@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.9 — Build 10
+
+- Branded the native installer with the app logo, a clean title, an app introduction, and getting-started instructions.
+- Added explicit Apple silicon/macOS requirements and fixed installation to Applications, preventing relocation to development builds.
+
 ## 1.0.8 — Build 9
 
 - Added JSON import/export in General settings, including ordered locations, emoji, custom labels, and all portable app preferences.
