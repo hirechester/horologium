@@ -33,10 +33,19 @@ struct PopoverView: View {
         .modifier(AppAccent(preferences: store.preferences))
     }
 
+    private let timeTravelHeadings = ["TIME TRAVEL", "Big Ball of Wibbly Wobbly", "Timey Wimey Stuff"]
+
     private var timeTravel: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
-                Text("TIME TRAVEL").font(.system(size: 10, weight: .semibold)).tracking(1).foregroundStyle(.secondary)
+                Button {
+                    store.timeTravelHeadingIndex = (store.timeTravelHeadingIndex + 1) % timeTravelHeadings.count
+                } label: {
+                    Text(timeTravelHeadings[store.timeTravelHeadingIndex])
+                        .font(.system(size: 10, weight: .semibold)).tracking(1)
+                        .foregroundStyle(.secondary).lineLimit(1).minimumScaleFactor(0.8)
+                }
+                .buttonStyle(.plain)
                 Spacer()
                 Button("Now") { store.returnToNow() }
                     .font(.caption.weight(.medium)).buttonStyle(.borderless)

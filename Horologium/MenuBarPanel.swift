@@ -17,6 +17,7 @@ final class MenuBarPanel: NSObject, NSWindowDelegate {
     private var localMonitor: Any?
     private var globalMonitor: Any?
     private(set) var isPresented = false
+    var onDismiss: (() -> Void)?
 
     init(controller: NSViewController, anchor: @escaping () -> (item: NSRect, screen: NSRect)?) {
         self.controller = controller
@@ -56,6 +57,7 @@ final class MenuBarPanel: NSObject, NSWindowDelegate {
         localMonitor = nil
         globalMonitor = nil
         panel.orderOut(nil)
+        onDismiss?()
     }
 
     func updateFrame() {

@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.10 — Build 11
+
+- Click the Time Travel heading to cycle through a small easter egg; closing the dropdown restores the normal heading.
+
 ## 1.0.9 — Build 10
 
 - Branded the native installer with the app logo, a clean title, an app introduction, and getting-started instructions.

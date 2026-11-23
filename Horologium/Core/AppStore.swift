@@ -93,6 +93,8 @@ final class AppStore: ObservableObject {
     @Published var locations: [SavedLocation] { didSet { save() } }
     @Published var preferences: Preferences { didSet { save() } }
     @Published var now: Date
+    // Ephemeral dropdown state; intentionally excluded from saved settings and transfers.
+    @Published var timeTravelHeadingIndex = 0
     @Published var previewDate: Date?
     @Published var month: Date
     @Published var storageWarning: String?

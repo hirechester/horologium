@@ -39,6 +39,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             let item = window.convertToScreen(button.convert(button.bounds, to: nil))
             return (item: item, screen: screen.visibleFrame)
         }
+        dropdown.onDismiss = { [weak self] in self?.store.timeTravelHeadingIndex = 0 }
         store.$now.combineLatest(store.$preferences).sink { [weak self] _, _ in
             // @Published sends before assignment; render on the next main run-loop turn.
             DispatchQueue.main.async {
