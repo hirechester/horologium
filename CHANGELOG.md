@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.11 — Build 12
+
+- Kept the Time Travel easter egg headings in all caps with the existing heading font styling.
+
 ## 1.0.10 — Build 11
 
 - Click the Time Travel heading to cycle through a small easter egg; closing the dropdown restores the normal heading.

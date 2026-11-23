@@ -33,7 +33,7 @@ struct PopoverView: View {
         .modifier(AppAccent(preferences: store.preferences))
     }
 
-    private let timeTravelHeadings = ["TIME TRAVEL", "Big Ball of Wibbly Wobbly", "Timey Wimey Stuff"]
+    private let timeTravelHeadings = ["TIME TRAVEL", "BIG BALL OF WIBBLY WOBBLY", "TIMEY WIMEY STUFF"]
 
     private var timeTravel: some View {
         VStack(alignment: .leading, spacing: 8) {
