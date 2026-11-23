@@ -72,7 +72,7 @@ Arrange **Calendar**, **Time travel**, and **Time zones** however you prefer. Dr
 | :---: | :---: |
 | <img src="docs/previews/10-layout-settings.png" width="360" alt="Layout settings for reordering the three dropdown sections"> | <img src="docs/previews/12-reordered-sections.png" width="330" alt="Dropdown arranged with world clocks above the calendar"> |
 
-## Match your Mac—or choose your own look
+## Match your Mac or choose your own look
 
 Follow the system’s appearance and accent color, or choose **Light**, **Dark**, and a **custom accent**. The custom color uses the native macOS color picker and is remembered when you switch back to System.
 
@@ -101,6 +101,8 @@ Calendar browsing, world clocks, city search, emoji search, time travel, and set
 You can also enable **Start Horologium at login** in General settings.
 
 ## Build and try it
+
+**A signed and notarized macOS installer package for deployment is coming soon.**
 
 Horologium requires **macOS 26 or later on Apple silicon**. Open `Horologium.xcodeproj` in Xcode 26 or later and run the **Horologium** scheme on **My Mac**.
 
