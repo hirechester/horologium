@@ -4,15 +4,15 @@ Build, test, package, and maintain Horologium. Run the commands below from the r
 
 ## Commit identity
 
-Use the GitHub account identity for local commits in this repository:
+Configure your own GitHub identity for local commits in your checkout. Replace the placeholders with your GitHub username and the noreply address from your GitHub email settings:
 
 ```sh
-git config --local user.name hirechester
-git config --local user.email 9629221+hirechester@users.noreply.github.com
+git config --local user.name "YOUR_GITHUB_USERNAME"
+git config --local user.email "YOUR_GITHUB_NOREPLY_EMAIL"
 git config --local user.useConfigOnly true
 ```
 
-This associates commits with the GitHub account without publishing a personal email or the local machine identity. Set this up again after cloning onto another Mac. Signing credentials and default settings exports are ignored by Git; keep them outside the repository where possible.
+This associates commits with your GitHub account without publishing a personal email or the local machine identity. Set this up again after cloning onto another Mac. Signing credentials and default settings exports are ignored by Git; keep them outside the repository where possible.
 
 ## Build and run
 

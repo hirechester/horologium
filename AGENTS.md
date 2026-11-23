@@ -11,5 +11,5 @@
 
 ## Commit identity
 
-- Use GitHub account `hirechester` for both author and committer, with the private email `9629221+hirechester@users.noreply.github.com`.
-- Keep this identity explicitly configured in this repository. Never fall back to a local machine username or a personal email address.
+- Use the current contributor's own GitHub identity and GitHub-provided noreply email for commits. Do not copy the repository owner's identity or attribute work to another contributor.
+- Respect the identity explicitly configured in the local checkout. Never fall back to an automatically inferred local machine username or publish a personal email address.
