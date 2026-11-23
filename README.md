@@ -112,3 +112,9 @@ See the [development guide](docs/DEVELOPMENT.md) for command-line builds, tests,
 - Emoji artwork: native macOS emoji. Search names and keywords come from Unicode and CLDR; the [Unicode license](Horologium/Resources/Unicode-LICENSE.txt) is bundled with the app.
 
 Built with SwiftUI and AppKit.
+
+## License
+
+Horologium's source code and documentation are available under the [MIT License](LICENSE).
+GeoNames city data and Unicode data retain their respective licenses listed above.
+The Horologium name, logo, and app icon are reserved and are not covered by the MIT license.

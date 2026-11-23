@@ -8,3 +8,27 @@ xcuserdata/
 *.pkg
 *.zip
 .env
+
+# Local secrets and environment overrides
+.env.*
+!.env.example
+!.env.sample
+!.env.template
+
+# Signing identities, private keys, certificates, and provisioning profiles
+*.p12
+*.pfx
+*.p8
+*.key
+*.pem
+*.cer
+*.crt
+*.cert
+*.csr
+*.mobileprovision
+*.provisionprofile
+*.keychain
+*.keychain-db
+
+# Personal settings transfer files (the app's default export filename)
+Horologium Settings*.json

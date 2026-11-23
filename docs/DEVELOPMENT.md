@@ -2,6 +2,18 @@
 
 Build, test, package, and maintain Horologium. Run the commands below from the repository root. For an overview of the app, see the [README](../README.md).
 
+## Commit identity
+
+Use the GitHub account identity for local commits in this repository:
+
+```sh
+git config --local user.name hirechester
+git config --local user.email 9629221+hirechester@users.noreply.github.com
+git config --local user.useConfigOnly true
+```
+
+This associates commits with the GitHub account without publishing a personal email or the local machine identity. Set this up again after cloning onto another Mac. Signing credentials and default settings exports are ignored by Git; keep them outside the repository where possible.
+
 ## Build and run
 
 Open `Horologium.xcodeproj` in Xcode 26 or later, choose the **Horologium** scheme and **My Mac**, then Run. Development does not require a paid Developer Program membership. Use **Sign to Run Locally** if Xcode requests signing configuration.

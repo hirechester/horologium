@@ -8,3 +8,8 @@
 - Keep the transfer format versioned. Make additive changes backward compatible; for breaking changes, bump the format version, provide migrations for older supported exports, and reject unsupported future formats without modifying current settings.
 - Extend round-trip tests with non-default values for new settings, and retain legacy-file compatibility tests.
 - Keep machine-specific OS registration, such as Start at login, local to each Mac. Do not import that state implicitly.
+
+## Commit identity
+
+- Use GitHub account `hirechester` for both author and committer, with the private email `9629221+hirechester@users.noreply.github.com`.
+- Keep this identity explicitly configured in this repository. Never fall back to a local machine username or a personal email address.
