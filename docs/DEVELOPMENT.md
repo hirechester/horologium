@@ -57,7 +57,7 @@ export NOTARY_PROFILE='Ardens-notary'
 
 The script builds an arm64 release app, signs it with hardened runtime and a secure timestamp, signs the installer, submits it for notarization, staples the ticket, and verifies the result. The installer places the app in `/Applications`. The bundle and package identifier is **`app.ardens.horologium`**. The test bundle is `app.ardens.horologium.tests`.
 
-Quit an existing Horologium process before installing an updated build, then reopen the app. Automatic updates and App Store distribution are outside this version.
+When updating on the startup volume, the installer terminates Horologium for the active console user before replacing it, then reopens `/Applications/Horologium.app` in that user's session if it was running. If the app cannot quit within 10 seconds, installation stops before replacement. Fresh installs leave the app closed. Installations onto other volumes do not affect the current session. Automatic updates and App Store distribution are outside this version.
 
 ## Move settings between Macs
 
@@ -85,7 +85,7 @@ Use `minor` or `major` for larger releases. The script increments the build numb
 
 SwiftUI views are hosted by an AppKit status item and rounded, arrowless floating panel. `TimeEngine` owns calendar and time-zone calculations; `CityCatalog` handles offline search; `AppStore` persists locations and preferences in UserDefaults. Preview time is temporary. Malformed settings are preserved under a recovery key before fresh defaults are used.
 
-The shared Xcode scheme runs unit tests for DST gaps/overlaps, date boundaries, leap days, fractional offsets, search, persistence, and an injectable clock. Visual tests render the actual SwiftUI views with sample locations into XCTest attachments and `/tmp/horologium-previews`. These previews are not desktop interaction tests. Live panel placement, full-screen Spaces, login-item approval, and signed installation should also be checked on a Mac before public distribution.
+The test script first exercises installer quit/relaunch behavior in an isolated copy with mocked OS commands, then runs the app tests. The shared Xcode scheme runs unit tests for DST gaps/overlaps, date boundaries, leap days, fractional offsets, search, persistence, and an injectable clock. Visual tests render the actual SwiftUI views with sample locations into XCTest attachments and `/tmp/horologium-previews`. These previews are not desktop interaction tests. Live panel placement, full-screen Spaces, login-item approval, and signed installation should also be checked on a Mac before public distribution.
 
 The Xcode project has no external package dependencies. After adding source/resource files, regenerate its file list:
 

@@ -34,7 +34,7 @@ ditto "$app" "$work/payload/Applications/Horologium.app"
 python3 scripts/prepare-installer.py prepare
 xcrun swift scripts/installer-artwork.swift Horologium/Resources/Logo.png "$work/Resources/Logo.png"
 pkgbuild --root "$work/payload" --component-plist "$work/components.plist" \
-  --install-location / --identifier app.ardens.horologium --version "$version" \
+  --scripts scripts/installer --install-location / --identifier app.ardens.horologium --version "$version" \
   "$work/Horologium-component.pkg"
 productbuild --synthesize --product "$work/requirements.plist" \
   --package "$work/Horologium-component.pkg" "$work/Distribution.xml"

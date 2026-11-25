@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.13 — Build 14
+
+- Installer updates now close the running app before replacement and reopen the updated app for the active user afterward.
+- Added the standard Command+W Close Window command for Settings.
+
 ## 1.0.12 — Build 13
 
 - Fixed clicking the menu bar item while the dropdown is open so it closes instead of reopening.

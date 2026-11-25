@@ -1,0 +1,21 @@
+#!/bin/bash
+set -eu
+source "$(dirname "$0")/common.sh"
+
+[[ "${3:-}" == / ]] || exit 0
+marker="$state_directory/relaunch-user"
+[[ -f "$marker" ]] || exit 0
+uid=$(/bin/cat "$marker")
+/bin/rm -f "$marker"
+current_uid=$(console_user_id) || exit 0
+# Do not launch into a different session if the console user changed mid-install.
+[[ "$uid" == "$current_uid" ]] || exit 0
+[[ -d /Applications/Horologium.app ]] || exit 0
+
+# Launch as the desktop user, never as the root Installer process.
+if ! /bin/launchctl asuser "$uid" /usr/bin/sudo -H -u "#$uid" \
+    /usr/bin/open /Applications/Horologium.app; then
+  # Installation succeeded even if the desktop session cannot accept a launch.
+  echo 'Horologium was updated. Open it from Applications to resume.' >&2
+fi
+exit 0

@@ -1,0 +1,28 @@
+#!/bin/bash
+set -eu
+source "$(dirname "$0")/common.sh"
+
+# An installation onto another volume must not affect this Mac's session.
+[[ "${3:-}" == / ]] || exit 0
+/bin/mkdir -p "$state_directory"
+/bin/chmod 700 "$state_directory"
+/bin/rm -f "$state_directory/relaunch-user"
+uid=$(console_user_id) || exit 0
+is_running "$uid" || exit 0
+
+# Request termination before replacing files; never force-kill during an update.
+if ! /usr/bin/pkill -TERM -u "$uid" -x Horologium; then
+  if is_running "$uid"; then
+    echo 'Could not close Horologium. Quit the app and run the installer again.' >&2
+    exit 1
+  fi
+fi
+for ((attempt = 0; attempt < 100; attempt++)); do
+  if ! is_running "$uid"; then
+    printf '%s\n' "$uid" > "$state_directory/relaunch-user"
+    exit 0
+  fi
+  /bin/sleep 0.1
+done
+echo 'Horologium is still running. Quit the app and run the installer again.' >&2
+exit 1

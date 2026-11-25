@@ -3,6 +3,30 @@ import XCTest
 @testable import Horologium
 
 final class MenuBarPanelTests: XCTestCase {
+    @MainActor func testCloseWindowMenuUsesNativeCommandWAction() {
+        let application = NSApplication.shared
+        let previousMenu = application.mainMenu
+        let delegate = AppDelegate()
+        delegate.configureMenu()
+        defer { application.mainMenu = previousMenu }
+        let fileMenu = application.mainMenu!.items.first { $0.title == "File" }!.submenu!
+        let closeItem = fileMenu.items.first { $0.keyEquivalent == "w" }!
+        XCTAssertEqual(closeItem.keyEquivalentModifierMask, .command)
+        XCTAssertEqual(closeItem.action, #selector(NSWindow.performClose(_:)))
+        XCTAssertNil(closeItem.target) // macOS routes the action to the current window.
+
+        // Exercise the native close action without relying on the test runner
+        // being granted foreground keyboard focus by the desktop session.
+        let window = NSWindow(contentRect: NSRect(x: 0, y: 0, width: 540, height: 600),
+                              styleMask: [.titled, .closable], backing: .buffered, defer: false)
+        window.isReleasedWhenClosed = false
+        window.orderFront(nil)
+        defer { window.close() }
+        XCTAssertTrue(window.isVisible)
+        XCTAssertTrue(application.sendAction(closeItem.action!, to: window, from: closeItem))
+        XCTAssertFalse(window.isVisible)
+    }
+
     @MainActor func testOutsideClickMonitorLeavesStatusItemToggleInControl() {
         let controller = NSViewController()
         controller.view = NSView(frame: NSRect(x: 0, y: 0, width: 352, height: 100))

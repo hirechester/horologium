@@ -30,12 +30,14 @@ if sys.argv[1] == 'prepare':
         'and slide through time to find a moment that works across time zones.' + r'\par\par '
         'Horologium works entirely offline. No accounts, conferencing integrations, '
         'or event notifications.' + r'\par\par '
-        'This installer adds Horologium to your Applications folder.' + r'\par\par\fs20 '
+        'This installer adds Horologium to your Applications folder. If it is running, '
+        'the installer will close it and reopen the updated version.' + r'\par\par\fs20 '
         + rtf(f"Version {version['version']} (build {version['build']})")
     )
     conclusion = (
         r'\fs32\b Ready for your menu bar\b0\fs24\par\par '
-        'Open Horologium from your Applications folder to get started.' + r'\par\par '
+        'If Horologium was running, it has been reopened with the update. '
+        'Otherwise, open it from your Applications folder to get started.' + r'\par\par '
         'Click its menu bar item to open the calendar and world clocks. '
         'Right-click the menu bar item to open Settings or quit.' + r'\par\par '
         'Moving from another Mac? Import your exported JSON settings in Settings > General.'

@@ -143,7 +143,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         settingsWindow?.makeKeyAndOrderFront(nil)
     }
 
-    private func configureMenu() {
+    func configureMenu() {
         let menu = NSMenu()
         let appMenu = NSMenu()
         appMenu.addItem(withTitle: "Horologium Settings…", action: #selector(showSettings), keyEquivalent: ",").target = self
@@ -152,6 +152,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         let appItem = NSMenuItem()
         appItem.submenu = appMenu
         menu.addItem(appItem)
+        let fileMenu = NSMenu(title: "File")
+        fileMenu.addItem(withTitle: "Close Window", action: #selector(NSWindow.performClose(_:)), keyEquivalent: "w")
+        let fileItem = NSMenuItem(title: "File", action: nil, keyEquivalent: "")
+        fileItem.submenu = fileMenu
+        menu.addItem(fileItem)
         let editMenu = NSMenu(title: "Edit")
         for (title, action, key) in [("Undo", Selector(("undo:")), "z"), ("Cut", #selector(NSText.cut(_:)), "x"),
                                      ("Copy", #selector(NSText.copy(_:)), "c"), ("Paste", #selector(NSText.paste(_:)), "v"),
