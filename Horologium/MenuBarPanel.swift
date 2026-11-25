@@ -79,7 +79,7 @@ final class MenuBarPanel: NSObject, NSWindowDelegate {
     }
 
     func windowDidResignKey(_ notification: Notification) {
-        // Let the status item's mouse-up action toggle the panel closed.
+        // Let the status item's mouse-down action toggle the panel closed.
         if NSEvent.pressedMouseButtons != 0, anchor()?.item.contains(NSEvent.mouseLocation) == true { return }
         dismiss()
     }
@@ -90,14 +90,21 @@ final class MenuBarPanel: NSObject, NSWindowDelegate {
         localMonitor = NSEvent.addLocalMonitorForEvents(matching: clicks) { [weak self] event in
             MainActor.assumeIsolated {
                 guard let self else { return }
-                if event.window !== self.panel && self.anchor()?.item.contains(NSEvent.mouseLocation) != true {
-                    self.dismiss()
-                }
+                self.dismissForOutsideClick(at: NSEvent.mouseLocation, insidePanel: event.window === self.panel)
             }
             return event
         }
         globalMonitor = NSEvent.addGlobalMonitorForEvents(matching: clicks) { [weak self] _ in
-            Task { @MainActor in self?.dismiss() }
+            // Capture the click position now; the pointer may move before the task runs.
+            let location = NSEvent.mouseLocation
+            Task { @MainActor in self?.dismissForOutsideClick(at: location, insidePanel: false) }
         }
+    }
+
+    func dismissForOutsideClick(at location: NSPoint, insidePanel: Bool) {
+        // macOS can report a status-item press through the global monitor too.
+        // Only the status item's action should toggle it, not this monitor.
+        guard !insidePanel, anchor()?.item.contains(location) != true else { return }
+        dismiss()
     }
 }

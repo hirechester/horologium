@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.12 — Build 13
+
+- Fixed clicking the menu bar item while the dropdown is open so it closes instead of reopening.
+- Kept status-item clicks out of outside-click dismissal and toggled on mouse-down.
+
 ## 1.0.11 — Build 12
 
 - Kept the Time Travel easter egg headings in all caps with the existing heading font styling.

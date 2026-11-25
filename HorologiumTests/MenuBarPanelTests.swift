@@ -3,6 +3,41 @@ import XCTest
 @testable import Horologium
 
 final class MenuBarPanelTests: XCTestCase {
+    @MainActor func testOutsideClickMonitorLeavesStatusItemToggleInControl() {
+        let controller = NSViewController()
+        controller.view = NSView(frame: NSRect(x: 0, y: 0, width: 352, height: 100))
+        let item = NSRect(x: 900, y: 876, width: 100, height: 24)
+        let dropdown = MenuBarPanel(controller: controller) {
+            (item: item, screen: NSRect(x: 0, y: 50, width: 1440, height: 826))
+        }
+        var dismissals = 0
+        dropdown.onDismiss = { dismissals += 1 }
+        dropdown.show()
+        defer { dropdown.dismiss() }
+
+        // A global or local notification of the status-item press must not
+        // dismiss early and turn the intended close into another open.
+        dropdown.dismissForOutsideClick(at: NSPoint(x: 950, y: 888), insidePanel: false)
+        XCTAssertTrue(dropdown.isPresented)
+        XCTAssertEqual(dismissals, 0)
+        dropdown.dismissForOutsideClick(at: NSPoint(x: 950, y: 800), insidePanel: true)
+        XCTAssertTrue(dropdown.isPresented)
+
+        // The status-item action closes the existing panel exactly once.
+        dropdown.dismiss()
+        XCTAssertFalse(dropdown.isPresented)
+        XCTAssertEqual(dismissals, 1)
+        dropdown.dismissForOutsideClick(at: NSPoint(x: 950, y: 888), insidePanel: false)
+        XCTAssertFalse(dropdown.isPresented)
+        XCTAssertEqual(dismissals, 1)
+
+        // A genuine outside click must still dismiss on the next opening.
+        dropdown.show()
+        dropdown.dismissForOutsideClick(at: NSPoint(x: 50, y: 50), insidePanel: false)
+        XCTAssertFalse(dropdown.isPresented)
+        XCTAssertEqual(dismissals, 2)
+    }
+
     @MainActor func testPanelStaysBelowItemAndKeepsTopEdgeWhenContentGrows() {
         let screen = NSRect(x: 0, y: 50, width: 1440, height: 826)
         let item = NSRect(x: 900, y: 876, width: 100, height: 24)

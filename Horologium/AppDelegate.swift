@@ -28,7 +28,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
         statusItem.button?.target = self
         statusItem.button?.action = #selector(statusItemClicked)
-        _ = statusItem.button?.sendAction(on: [.leftMouseUp, .rightMouseUp])
+        // Toggle on press, before status-item tracking can deliver a later mouse-up.
+        _ = statusItem.button?.sendAction(on: [.leftMouseDown, .rightMouseUp])
         statusItem.button?.setAccessibilityLabel("Horologium calendar and world clocks")
         statusItem.button?.font = .monospacedDigitSystemFont(ofSize: NSFont.systemFontSize, weight: .regular)
         let controller = NSHostingController(rootView: PopoverView(store: store) { [weak self] in self?.showLocationSettings() })
